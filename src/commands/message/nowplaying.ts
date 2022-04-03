@@ -14,7 +14,7 @@ module.exports = {
         .setThumbnail(queue.current.thumbnail)
         .setFooter({text: queue.current.url, iconURL: message.client.user.avatarURL({format : 'png', dynamic : true, size : 1024})})
         .addField('Channel', `${queue.current.author}`, true)
-        .addField('Requested by', `${queue.current.requestedBy}`, true)
+        .addField('Requested by', `${queue.current.requestedBy.username}`, true)
         .addField('Duration', `${queue.current.duration}`, true)
         .addField('Source', `${queue.current.source}`, true)
         .addField('Views', `${queue.current.views}`, true)
