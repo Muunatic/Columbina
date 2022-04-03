@@ -17,7 +17,7 @@ client.on('messageCreate', async (message) => {
         client.commands.get(command).execute(message, client, args);
     } catch (error) {
         console.error(error);
-        message.reply(DefaultError);
+        await message.reply(DefaultError);
     }
 
 });
