@@ -22,6 +22,8 @@ module.exports = {
             }
         });
 
+        if (!args[1]) return message.reply('**Berikan judul untuk memulai lagu**');
+
         if (!message.member.voice.channel) return message.reply('**Kamu tidak divoice channel!**');
 
         try {
@@ -34,7 +36,7 @@ module.exports = {
         if (message.guild.me.voice.channel && message.member.voice.channel.id !== message.guild.me.voice.channel.id) return message.reply('**Kamu tidak divoice channel yang sama!**');
 
         const track = await player.search(query, {
-            requestedBy: message.user
+            requestedBy: message.author
         }).then(x => x.tracks[0]);
         if (!track) return await message.channel.send({ content: 'null' });
 
