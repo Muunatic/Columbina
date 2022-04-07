@@ -29,7 +29,7 @@ export const client = new Client({
         "GUILD_SCHEDULED_EVENT",
         "MESSAGE",
         "REACTION",
-        "USER",   
+        "USER"
     ]
 
 });
