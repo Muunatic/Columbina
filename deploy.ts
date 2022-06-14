@@ -1,16 +1,16 @@
+import path = require('node:path');
 import fs = require('fs');
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v10';
 import { token, clientId } from './src/data/config';
 
-const commands = []
-
-.map(command => command.toJSON());
-
-const commandFiles = fs.readdirSync('./src/commands/interaction').filter(file => file.endsWith('.js'));
+const commands: string[] = [];
+const commandsPath = path.join(__dirname, './src/commands/interaction');
+const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 
 for (const file of commandFiles) {
-    const command = require(`./src/commands/interaction/${file}`);
+	const filePath = path.join(commandsPath, file);
+    const command = require(filePath);
     commands.push(command.data.toJSON());
 }
 
