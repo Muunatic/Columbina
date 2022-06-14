@@ -1,4 +1,4 @@
-console.info('Loading event.ts');
+console.info('Loading events.ts');
 import { player } from '../client';
 
 player.on('channelEmpty', async (queue) => {
