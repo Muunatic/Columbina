@@ -7,13 +7,14 @@
           "ES2021",
           "dom"
       ],
+      "alwaysStrict": true,
       "allowJs": false,
       "sourceMap": false,
       "inlineSourceMap": true,
       "inlineSources": true,
       "noImplicitAny": false,
       "noImplicitThis": true,
-      "strictNullChecks": false, 
+      "strictNullChecks": true, 
       "strictFunctionTypes": true,
       "strictBindCallApply": true,
       "forceConsistentCasingInFileNames": true
