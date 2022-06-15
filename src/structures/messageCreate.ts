@@ -6,7 +6,7 @@ import { DefaultError } from '../structures/error';
 client.on('messageCreate', async (message) => {
 
     const args = message.content.slice(prefix.length).trim().split(/ +/);
-    const command = args.shift().toLowerCase();
+    const command = args.shift()?.toLowerCase();
 
     if (!message.content.startsWith(prefix) || message.author.bot) return;
     if (!message.guild) return;
@@ -14,7 +14,7 @@ client.on('messageCreate', async (message) => {
     if (!client.commands.has(command)) return;
 
     try {
-        client.commands.get(command).execute(message, client, args);
+        client.commands.get(command).execute(message, args);
     } catch (error) {
         console.error(error);
         await message.reply(DefaultError);
