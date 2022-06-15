@@ -50,7 +50,8 @@ npm start
 
 |Version|Vulnerability|
 |-|-|
-|2.0.x|:heavy_check_mark:|
+|2.1.x|:white_check_mark:|
+|2.0.x|:white_check_mark:|
 
 Click redirect for more info.
 <br>
