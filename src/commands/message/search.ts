@@ -54,7 +54,7 @@ module.exports = {
 
         collector.on('collect', async (msg) => {
             const value = parseInt(msg.content);
-            if (msg.content.toLowerCase() === 'cancel') return message.reply('**Query dibatalkan**');
+            if (msg.content.toLowerCase() === 'cancel') return message.reply('**Query dibatalkan**') && collector.stop();
             if (!value || value < 0 || value > 5) return message.reply(DefaultError);
             await message.channel.send({ content: `Menambahkan lagu **${track.tracks[value - 1].title}** di **${message.member.voice.channel.name}...**` });
             collector.stop()
