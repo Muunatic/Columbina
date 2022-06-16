@@ -1,4 +1,4 @@
-import { MessageEmbed } from 'discord.js';
+import { MessageEmbed, MessageActionRow, MessageButton } from 'discord.js';
 import { player } from '../../client';
 
 module.exports = {
@@ -22,6 +22,81 @@ module.exports = {
         .addField('Progress Bar', `${queue.createProgressBar()}`, true)
         .setTimestamp()
 
-        message.reply({embeds: [nowplayingembed]});
+        const button = new MessageActionRow()
+        .addComponents(
+            new MessageButton()
+            .setCustomId('resume')
+            .setLabel('▶️')
+            .setStyle('SUCCESS')
+        )
+        .addComponents(
+            new MessageButton()
+            .setCustomId('pause')
+            .setLabel('⏸️')
+            .setStyle('PRIMARY')
+        )
+        .addComponents(
+            new MessageButton()
+            .setCustomId('skip')
+            .setLabel('⏭️')
+            .setStyle('PRIMARY')
+        )
+        .addComponents(
+            new MessageButton()
+            .setCustomId('stop')
+            .setLabel('⏹️')
+            .setStyle('DANGER')
+        )
+
+        const btnfilter = msg => msg.member.id === message.author.id;
+        const collector = message.channel.createMessageComponentCollector({ filter: btnfilter, time: 60000 });
+
+        collector.on('collect', async msg => {
+
+            if (msg.customId === 'resume') {
+                const queue = player.getQueue(message.guild.id);
+                if (queue.setPaused(false)) return msg.reply({content: '**Lagu berlangsung**'});
+                queue.setPaused(false);
+                await msg.reply({content: '**Lagu telah diresume**'});
+                collector.stop();
+            }
+
+            if (msg.customId === 'pause') {
+                const queue = player.getQueue(message.guild.id);
+                if (queue.setPaused(true)) return msg.reply({content: '**Lagu dipause**'});
+                queue.setPaused(true);
+                await msg.reply({content: '**Lagu telah dipause**'});
+                collector.stop();
+            }
+
+            if (msg.customId === 'skip') {
+                const queue = player.getQueue(message.guild.id);
+                queue.skip();
+                await msg.reply({content: '**Lagu diskip**'});
+                collector.stop();
+            }
+
+            if (msg.customId === 'stop') {
+                const queue = player.getQueue(message.guild.id);
+                queue.destroy();
+                await msg.reply({content: '**Lagu distop**'});
+                collector.stop();
+            }
+    
+            collector.on('end', collected => console.log(collected.size));
+
+        });
+
+        message.reply({embeds: [nowplayingembed], components: [button]}).then(msg => {
+                setTimeout(() => {
+                    button.components[0].setDisabled(true);
+                    button.components[1].setDisabled(true);
+                    button.components[2].setDisabled(true);
+                    button.components[3].setDisabled(true);
+                    msg.edit({components: [button]});
+                    collector.stop();
+                }, 10000)
+            }
+        )
     },
 };
