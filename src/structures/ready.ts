@@ -1,3 +1,4 @@
+console.info('Loading messageCreate.ts');
 import { client } from '../client';
 
 client.on('shardReady', () => {
