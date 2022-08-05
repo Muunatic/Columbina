@@ -13,13 +13,15 @@ module.exports = {
         .setTitle(queue.current.title)
         .setThumbnail(queue.current.thumbnail)
         .setFooter({text: queue.current.url, iconURL: message.client.user.avatarURL({format : 'png', dynamic : true, size : 1024})})
-        .addField('Channel', `${queue.current.author}`, true)
-        .addField('Requested by', `${queue.current.requestedBy.username}`, true)
-        .addField('Duration', `${queue.current.duration}`, true)
-        .addField('Source', `${queue.current.source}`, true)
-        .addField('Views', `${queue.current.views}`, true)
-        .addField('ID', `${queue.current.id}`, true)
-        .addField('Progress Bar', `${queue.createProgressBar()}`, true)
+        .addFields(
+            {name: 'Channel', value: `${queue.current.author}`, inline: true},
+            {name: 'Requested by', value: `${queue.current.requestedBy.username}`, inline: true},
+            {name: 'Duration', value: `${queue.current.duration}`, inline: true},
+            {name: 'Source', value: `${queue.current.source}`, inline: true},
+            {name: 'Views', value: `${queue.current.views}`, inline: true},
+            {name: 'ID', value: `${queue.current.id}`, inline: true},
+            {name: 'Progress Bar', value: `${queue.createProgressBar()}`, inline: true}
+        )
         .setTimestamp()
 
         const button = new MessageActionRow()
