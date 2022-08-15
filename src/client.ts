@@ -1,5 +1,4 @@
 import { Client, Intents } from 'discord.js';
-import { token } from './data/config';
 
 export const client = new Client({
     
@@ -36,12 +35,3 @@ export const client = new Client({
 
 export const { Player, QueueRepeatMode } = require('discord-player');
 export const player = new Player(client);
-
-require('./structures/ready');
-require('./structures/handler');
-require('./structures/messageCreate');
-require('./structures/interactionCreate');
-require('./structures/error');
-require('./events/events');
-
-client.login(token);

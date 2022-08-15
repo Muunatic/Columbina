@@ -19,7 +19,7 @@ const rest = new REST({ version: '10' }).setToken(token);
 (async () => {
 
 	try {
-		console.log('Refreshing...');
+		console.log('Deploying');
 		await rest.put(
 			Routes.applicationCommands(clientId),
 			{ body: commands },

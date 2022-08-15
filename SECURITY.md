@@ -2,8 +2,9 @@
 
 |Version|Vulnerability|
 |-|-|
-|2.1.0|:heavy_check_mark:|
-|2.0.1|:heavy_check_mark:|
-|2.0.0|:heavy_check_mark:|
+|2.1.1|:heavy_check_mark:|
+|2.1.0|:x:|
+|2.0.1|:x:|
+|2.0.0|:x:|
 
-Please report security issues to [Muunatic](https://discordapp.com/users/527415996508536832)
+Please report security issues to [Muunatic](mailto:muunatic@esrynt.org)
