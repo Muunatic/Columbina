@@ -1,9 +1,10 @@
+import { Message } from 'discord.js';
 import { player } from '../../client';
 
 module.exports = {
     name: 'volume',
-    async execute(message, args) {
-        const queue = await player.getQueue(message.guild.id);
+    async execute(message: Message, args: string | number) {
+        const queue = player.getQueue(message.guild.id);
         if (!queue || !queue.playing) return message.reply('**Tidak ada music yang berjalan**');
         if (!message.member.voice.channel) return message.reply('**Kamu tidak divoice channel!**');
         if (message.guild.me.voice.channel && message.member.voice.channel.id !== message.guild.me.voice.channel.id) return message.reply('**Kamu tidak divoice channel yang sama!**');

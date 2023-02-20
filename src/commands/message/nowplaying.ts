@@ -1,13 +1,14 @@
-import { MessageEmbed, MessageActionRow, MessageButton } from 'discord.js';
+import { MessageEmbed, MessageActionRow, MessageButton, Message } from '../../client';
 import { player } from '../../client';
 
 module.exports = {
     name: 'nowplaying',
-    async execute(message) {
+    async execute(message: Message) {
         const queue = player.getQueue(message.guild.id);
         if (!queue || !queue.playing) return message.reply('**Tidak ada music yang berjalan**');
         if (!message.member.voice.channel) return message.reply('**Kamu tidak divoice channel!**');
         if (message.guild.me.voice.channel && message.member.voice.channel.id !== message.guild.me.voice.channel.id) return message.reply('**Kamu tidak divoice channel yang sama!**');
+        
         const nowplayingembed = new MessageEmbed()
         .setColor('#89e0dc')
         .setTitle(queue.current.title)
@@ -22,7 +23,7 @@ module.exports = {
             {name: 'ID', value: `${queue.current.id}`, inline: true},
             {name: 'Progress Bar', value: `${queue.createProgressBar()}`, inline: true}
         )
-        .setTimestamp()
+        .setTimestamp();
 
         const button = new MessageActionRow()
         .addComponents(
@@ -48,12 +49,12 @@ module.exports = {
             .setCustomId('stop')
             .setLabel('⏹️')
             .setStyle('DANGER')
-        )
+        );
 
-        const btnfilter = msg => msg.member.id === message.author.id;
+        const btnfilter = (msg: any) => msg.member.id === message.author.id;
         const collector = message.channel.createMessageComponentCollector({ filter: btnfilter, time: 60000 });
 
-        collector.on('collect', async msg => {
+        collector.on('collect', async (msg) => {
 
             if (msg.customId === 'resume') {
                 const queue = player.getQueue(message.guild.id);
@@ -85,11 +86,11 @@ module.exports = {
                 collector.stop();
             }
     
-            collector.on('end', collected => console.log(collected.size));
+            collector.on('end', (collected) => console.log(collected.size));
 
         });
 
-        message.reply({embeds: [nowplayingembed], components: [button]}).then(msg => {
+        message.reply({embeds: [nowplayingembed], components: [button]}).then((msg) => {
                 setTimeout(() => {
                     button.components[0].setDisabled(true);
                     button.components[1].setDisabled(true);
@@ -97,8 +98,8 @@ module.exports = {
                     button.components[3].setDisabled(true);
                     msg.edit({components: [button]});
                     collector.stop();
-                }, 10000)
+                }, 10000);
             }
-        )
+        );
     },
 };
