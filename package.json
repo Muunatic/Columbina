@@ -1,41 +1,40 @@
 {
   "name": "vladilena",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Vladilena Milizé",
   "main": "./dist/index.js",
   "scripts": {
-    "build": "tsc",
     "test": "eslint .",
-    "lint": "npx eslint /**",
-    "lint:fix": "npx eslint --fix",
+    "lint": "npx eslint **/*.ts",
+    "lint:fix": "npx eslint . --fix",
     "deploy": "node ./dist/deploy.js",
     "start": "node ./dist/index.js"
   },
+  "homepage": "https://github.com/Muunatic/Vladilena",
   "author": "Muunatic",
   "license": "AGPL-3.0",
-  "homepage": "https://github.com/Muunatic/Vladilena",
   "dependencies": {
-    "@discordjs/builders": "^0.16.0",
-    "@discordjs/collection": "^0.8.0",
-    "@discordjs/opus": "^0.8.0",
-    "@discordjs/rest": "^0.6.0",
-    "@discordjs/voice": "^0.11.0",
-    "discord-api-types": "^0.37.2",
-    "discord-player": "^5.2.2",
-    "discord.js": "^13.9.2",
-    "ffmpeg": "^0.0.4",
-    "ytdl-core": "^4.11.0"
+    "@discordjs/builders": "0.16.0",
+    "@discordjs/collection": "0.8.0",
+    "@discordjs/opus": "0.9.0",
+    "@discordjs/rest": "1.0.1",
+    "@discordjs/voice": "0.11.0",
+    "discord-api-types": "0.37.33",
+    "discord-player": "5.2.2",
+    "discord.js": "13.12.0",
+    "ffmpeg": "0.0.4",
+    "ytdl-core": "4.11.2"
   },
   "devDependencies": {
-    "@types/node": "^17.0.45",
-    "@typescript-eslint/eslint-plugin": "^5.33.0",
-    "@typescript-eslint/parser": "^5.33.0",
-    "eslint": "^8.22.0",
-    "ffmpeg-static": "^4.4.1",
-    "typescript": "^4.7.4"
+    "@types/node": "18.13.0",
+    "@typescript-eslint/eslint-plugin": "5.51.0",
+    "@typescript-eslint/parser": "5.51.0",
+    "eslint": "8.34.0",
+    "ffmpeg-static": "4.4.1",
+    "typescript": "4.9.5"
   },
   "engines": {
-    "node": ">=16.14.2",
-    "npm": ">=8.5.0"
+    "node": "16.19.0",
+    "npm": "8.19.3"
   }
 }
