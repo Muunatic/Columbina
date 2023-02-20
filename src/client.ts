@@ -1,6 +1,7 @@
-import { Client, Intents } from 'discord.js';
+import { Client, Collection, Intents, Interaction, Message, BaseCommandInteraction, MessageEmbed, MessageActionRow, MessageButton, MessageCollector } from 'discord.js';
+import { Player, QueueRepeatMode } from 'discord-player';
 
-export const client = new Client({
+const client = new Client({
     
     intents:
     [
@@ -33,5 +34,19 @@ export const client = new Client({
 
 });
 
-export const { Player, QueueRepeatMode } = require('discord-player');
-export const player = new Player(client);
+const player = new Player(client);
+
+export {
+    Collection,
+    Message,
+    MessageEmbed,
+    MessageActionRow,
+    MessageButton,
+    MessageCollector,
+    BaseCommandInteraction,
+    Interaction,
+    client,
+    Player,
+    player, 
+    QueueRepeatMode
+};
