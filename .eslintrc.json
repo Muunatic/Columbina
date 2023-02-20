@@ -17,10 +17,12 @@
     ],
     "rules": {
         "no-unused-vars": 1,
-        "no-useless-escape": 0,
-        "@typescript-eslint/no-explicit-any": 0, 
         "@typescript-eslint/no-var-requires": 0,
         "@typescript-eslint/no-unused-vars": 1,
-        "@typescript-eslint/no-inferrable-types": 0
+        "@typescript-eslint/no-explicit-any": 0,
+        "eol-last": ["warn", "always"],
+        "semi": "warn",
+        "semi-style": ["warn", "last"],
+        "no-useless-escape": 0
     }
 }

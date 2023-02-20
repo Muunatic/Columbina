@@ -1,8 +1,8 @@
 console.info('Loading interactionCreate.ts');
-import { client } from '../client';
+import { client, Interaction } from '../client';
 import { DefaultError } from '../structures/error';
 
-client.on('interactionCreate', async (interaction) => {
+client.on('interactionCreate', async (interaction: Interaction) => {
 
     if (!interaction.isCommand()) return;
     if (!interaction.guild) return;

@@ -1,15 +1,15 @@
-import { player } from '../../client';
+import { player, Message } from '../../client';
 import { DefaultError } from '../../structures/error';
 
 module.exports = {
     name: 'play',
-    async execute(message, args) {
+    async execute(message: Message, args: Array<string | number>) {
         const query = args.join(' ');
-        const queue = await player.createQueue(message.guild, {
+        const queue = player.createQueue(message.guild, {
             autoSelfDeaf: true,
             leaveOnEnd: true,
             leaveOnEmpty: true,
-            leaveOnEmptyCooldown: 60000,
+            leaveOnEmptyCooldown: 0,
             ytdlOptions: {
                 quality: "highestaudio",
                 filter: "audioonly",
@@ -29,7 +29,7 @@ module.exports = {
             if (!queue.connection) await queue.connect(message.member.voice.channel);
         } catch {
             queue.destroy();
-            return await message.reply({ content: DefaultError, ephemeral: true });
+            return await message.reply({ content: DefaultError });
         }
 
         if (message.guild.me.voice.channel && message.member.voice.channel.id !== message.guild.me.voice.channel.id) return message.reply('**Kamu tidak divoice channel yang sama!**');

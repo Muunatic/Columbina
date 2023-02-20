@@ -1,16 +1,16 @@
 console.info('Loading voice.ts');
+import { VoiceState } from 'discord.js';
 import { client, player } from '../client';
 
-client.on('voiceStateUpdate', (oldState, newState) => {
+client.on('voiceStateUpdate', (oldState: VoiceState, newState: VoiceState) => {
     
-    const queue = player.getQueue(oldState.guild.id);
-
-    if (oldState.member?.user.bot) return;
+    const queue = player.getQueue<any>(oldState.guild.id);
+    if (oldState.member.user.bot) return;
 
     if (oldState.channelId && newState && oldState.channelId !== newState.channelId) {
 
-        if (queue.connection.channel && newState.member?.id === newState.guild.me?.id || (newState.member?.id !== newState.guild.me?.id && oldState.channelId === queue.connection.channel?.id)) {
-            if (oldState.channel?.members.filter((member) => !member.user.bot).size === 0) {
+        if (queue.connection.channel && newState.member.id === newState.guild.me.id || (newState.member.id !== newState.guild.me.id && oldState.channelId === queue.connection.channel.id)) {
+            if (oldState.channel.members.filter((member) => !member.user.bot).size === 0) {
                 queue.metadata.channel.send('**Tidak ada member di voice**');
                 queue.destroy();
             } else {
@@ -18,8 +18,8 @@ client.on('voiceStateUpdate', (oldState, newState) => {
             }
         }
 
-        if (oldState.member?.id === oldState.client.user?.id && !newState.channelId) {
-            if (oldState.channel?.members.filter((member) => !member.user.bot).size === 0) {
+        if (oldState.member.id === oldState.client.user.id && !newState.channelId) {
+            if (oldState.channel.members.filter((member) => !member.user.bot).size === 0) {
                 queue.metadata.channel.send('**Tidak ada member di voice**');
                 queue.destroy();
             } else {

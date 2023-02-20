@@ -1,8 +1,8 @@
-import { player } from '../../client';
+import { player, Message } from '../../client';
 
 module.exports = {
     name: 'resume',
-    async execute(message) {
+    async execute(message: Message) {
         const queue = await player.getQueue(message.guild.id);
         if (!queue || !queue.playing) return message.reply('**Tidak ada music yang berjalan**');
         if (!message.member.voice.channel) return message.reply('**Kamu tidak divoice channel!**');

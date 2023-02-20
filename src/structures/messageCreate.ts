@@ -1,12 +1,12 @@
 console.info('Loading messageCreate.ts');
-import { client } from '../client';
+import { client, Message } from '../client';
 import { prefix } from '../data/config';
 import { DefaultError } from '../structures/error';
 
-client.on('messageCreate', async (message) => {
+client.on('messageCreate', async (message: Message) => {
 
     const args = message.content.slice(prefix.length).trim().split(/ +/);
-    const command = args.shift()?.toLowerCase();
+    const command = args.shift().toLowerCase();
 
     if (!message.content.startsWith(prefix) || message.author.bot) return;
     if (!message.guild) return;
