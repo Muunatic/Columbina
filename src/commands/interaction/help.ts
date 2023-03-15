@@ -1,12 +1,12 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { BaseCommandInteraction, MessageEmbed } from '../../client';
+import { CommandInteraction, MessageEmbed } from '../../client';
 import { prefix } from '../../data/config';
 
 module.exports = {
     data: new SlashCommandBuilder()
     .setName('help')
     .setDescription('Help command'),
-    async execute(interaction: BaseCommandInteraction) {
+    async execute(interaction: CommandInteraction) {
         const embed = new MessageEmbed()
 
         .setColor('#89e0dc')

@@ -1,6 +1,5 @@
 console.info('Loading events.ts');
-import { Queue } from 'discord-player';
-import { client, player } from '../client';
+import { client, player, Queue } from '../client';
 
 client.on('shardDisconnect', () => {
     console.log('Disconnect');
