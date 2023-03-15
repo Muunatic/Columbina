@@ -17,16 +17,13 @@ for (const file of commandFiles) {
 const rest = new REST({ version: '10' }).setToken(token);
 
 (async () => {
-
-	try {
-		console.log('Deploying');
-		await rest.put(
-			Routes.applicationCommands(clientId),
-			{ body: commands },
-		);
-		console.log('Deployed');
-	} catch (error) {
-		console.error(error);
-	}
+    
+    try {
+        console.log("Deploying");
+        await rest.put(Routes.applicationCommands(clientId), { body: commands });
+        console.log("Deployed");
+    } catch (error) {
+        console.error(error);
+    }
 
 })();

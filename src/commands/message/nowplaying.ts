@@ -1,4 +1,4 @@
-import { MessageEmbed, MessageActionRow, MessageButton, Message } from '../../client';
+import { MessageEmbed, MessageActionRow, MessageButton, Message, MessageComponentInteraction } from '../../client';
 import { player } from '../../client';
 
 module.exports = {
@@ -51,7 +51,7 @@ module.exports = {
             .setStyle('DANGER')
         );
 
-        const btnfilter = (msg: any) => msg.member.id === message.author.id;
+        const btnfilter = (msg: MessageComponentInteraction) => msg.member.user.id === message.author.id;
         const collector = message.channel.createMessageComponentCollector({ filter: btnfilter, time: 60000 });
 
         collector.on('collect', async (msg) => {
