@@ -1,5 +1,5 @@
-import { Client, Collection, Intents, Interaction, Message, BaseCommandInteraction, MessageEmbed, MessageActionRow, MessageButton, MessageCollector } from 'discord.js';
-import { Player, QueueRepeatMode } from 'discord-player';
+import { Client, Collection, Intents, Interaction, Message, CommandInteraction, MessageEmbed, MessageActionRow, MessageButton, MessageCollector, MessageComponentInteraction, VoiceState } from 'discord.js';
+import { Player, QueueRepeatMode, Queue } from 'discord-player';
 
 const client = new Client({
     
@@ -38,15 +38,18 @@ const player = new Player(client);
 
 export {
     Collection,
+    CommandInteraction,
+    Interaction,
     Message,
     MessageEmbed,
     MessageActionRow,
     MessageButton,
     MessageCollector,
-    BaseCommandInteraction,
-    Interaction,
+    MessageComponentInteraction,
     client,
     Player,
-    player, 
-    QueueRepeatMode
+    player,
+    Queue,
+    QueueRepeatMode,
+    VoiceState
 };
