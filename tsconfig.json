@@ -14,9 +14,8 @@
       "forceConsistentCasingInFileNames": true,
       "inlineSourceMap": true,
       "inlineSources": true,
-      "noImplicitAny": false,
-      "noImplicitThis": true,
-      "strictFunctionTypes": true,
+      "noImplicitAny": true,
+      "strict": true,
       "skipLibCheck": true,
       "sourceMap": false,
       "strictNullChecks": false
