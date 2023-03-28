@@ -1,6 +1,17 @@
 console.info('Loading voice.ts');
 import { VoiceState } from 'discord.js';
 import { client, player } from '../client';
+import { VoiceConnectionStatus } from '@discordjs/voice';
+
+player.on('connectionCreate', (queue) => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-ignore
+    queue.connection.voiceConnection.on('stateChange', (oldState, newState) => {
+        if (oldState.status === VoiceConnectionStatus.Ready && newState.status === VoiceConnectionStatus.Connecting) {
+            queue.connection.voiceConnection.configureNetworking();
+        }
+    });
+});
 
 client.on('voiceStateUpdate', (oldState: VoiceState, newState: VoiceState) => {
     
