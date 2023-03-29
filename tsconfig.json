@@ -14,6 +14,7 @@
       "forceConsistentCasingInFileNames": true,
       "inlineSourceMap": true,
       "inlineSources": true,
+      "newLine": "crlf",
       "noImplicitAny": true,
       "strict": true,
       "skipLibCheck": true,
@@ -21,7 +22,7 @@
       "strictNullChecks": false
     },
     "include": [
-      "./"
+      "./**/*.ts"
     ],
     "exclude": [
       "node_modules"
