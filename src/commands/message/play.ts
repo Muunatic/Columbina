@@ -3,19 +3,13 @@ import { DefaultError } from '../../structures/error';
 
 module.exports = {
     name: 'play',
-    async execute(message: Message, args: Array<string | number>) {
+    async execute(message: Message, args: any) {
         const query = args.join(' ');
-        const queue = player.createQueue(message.guild, {
-            autoSelfDeaf: true,
+        const queue = player.nodes.create(message.guild, {
+            selfDeaf: true,
             leaveOnEnd: true,
             leaveOnEmpty: true,
-            leaveOnEmptyCooldown: 0,
-            ytdlOptions: {
-                quality: "highestaudio",
-                filter: "audioonly",
-                highWaterMark: 1 << 25,
-                dlChunkSize: 0,
-            },
+            leaveOnEmptyCooldown: 5000,
             metadata: {
                 channel: message.channel
             }
@@ -28,19 +22,20 @@ module.exports = {
         try {
             if (!queue.connection) await queue.connect(message.member.voice.channel);
         } catch {
-            queue.destroy();
+            queue.delete();
             return await message.reply({ content: DefaultError });
         }
 
-        if (message.guild.me.voice.channel && message.member.voice.channel.id !== message.guild.me.voice.channel.id) return message.reply('**Kamu tidak divoice channel yang sama!**');
+        if (message.guild.members.me.voice.channel && message.member.voice.channel.id !== message.guild.members.me.voice.channel.id) return message.reply('**Kamu tidak divoice channel yang sama!**');
 
         const track = await player.search(query, {
+            searchEngine: "youtube",
             requestedBy: message.author
         }).then(x => x.tracks[0]);
         if (!track) return await message.channel.send({ content: DefaultError });
 
-        queue.play(track);
+        queue.node.play(track);
 
         return await message.channel.send({ content: `Menambahkan lagu **${track.title}** di **${message.member.voice.channel.name}...**` });
-    },
+    }
 };

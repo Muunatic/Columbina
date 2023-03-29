@@ -1,105 +1,108 @@
-import { MessageEmbed, MessageActionRow, MessageButton, Message, MessageComponentInteraction } from '../../client';
+import { EmbedBuilder, ButtonBuilder, ButtonStyle, ButtonInteraction, Message, ActionRowBuilder, MessageComponentInteraction } from '../../client';
 import { player } from '../../client';
 
 module.exports = {
     name: 'nowplaying',
     async execute(message: Message) {
-        const queue = player.getQueue(message.guild.id);
-        if (!queue || !queue.playing) return message.reply('**Tidak ada music yang berjalan**');
+        const queue = player.nodes.get(message.guild.id);
         if (!message.member.voice.channel) return message.reply('**Kamu tidak divoice channel!**');
-        if (message.guild.me.voice.channel && message.member.voice.channel.id !== message.guild.me.voice.channel.id) return message.reply('**Kamu tidak divoice channel yang sama!**');
+        if (message.guild.members.me.voice.channel && message.member.voice.channel.id !== message.guild.members.me.voice.channel.id) return message.reply('**Kamu tidak divoice channel yang sama!**');
         
-        const nowplayingembed = new MessageEmbed()
+        const nowplayingembed = new EmbedBuilder()
         .setColor('#89e0dc')
-        .setTitle(queue.current.title)
-        .setThumbnail(queue.current.thumbnail)
-        .setFooter({text: queue.current.url, iconURL: message.client.user.avatarURL({format : 'png', dynamic : true, size : 1024})})
+        .setTitle(queue.currentTrack.title)
+        .setThumbnail(queue.currentTrack.thumbnail)
+        .setFooter({text: queue.currentTrack.url, iconURL: message.client.user.avatarURL({extension: 'png', forceStatic: false, size: 1024})})
         .addFields(
-            {name: 'Channel', value: `${queue.current.author}`, inline: true},
-            {name: 'Requested by', value: `${queue.current.requestedBy.username}`, inline: true},
-            {name: 'Duration', value: `${queue.current.duration}`, inline: true},
-            {name: 'Source', value: `${queue.current.source}`, inline: true},
-            {name: 'Views', value: `${queue.current.views}`, inline: true},
-            {name: 'ID', value: `${queue.current.id}`, inline: true},
-            {name: 'Progress Bar', value: `${queue.createProgressBar()}`, inline: true}
+            {name: 'Channel', value: `${queue.currentTrack.author}`, inline: true},
+            {name: 'Requested by', value: `${queue.currentTrack.requestedBy.username}`, inline: true},
+            {name: 'Duration', value: `${queue.currentTrack.duration}`, inline: true},
+            {name: 'Source', value: `${queue.currentTrack.source}`, inline: true},
+            {name: 'Views', value: `${queue.currentTrack.views}`, inline: true},
+            {name: 'ID', value: `${queue.currentTrack.id}`, inline: true},
+            {name: 'Progress Bar', value: `${queue.node.createProgressBar()}`, inline: true}
         )
         .setTimestamp();
-
-        const button = new MessageActionRow()
+        
+        const row = new ActionRowBuilder<ButtonBuilder>()
         .addComponents(
-            new MessageButton()
+            new ButtonBuilder()
             .setCustomId('resume')
             .setLabel('▶️')
-            .setStyle('SUCCESS')
+            .setStyle(ButtonStyle.Success)
         )
         .addComponents(
-            new MessageButton()
+            new ButtonBuilder()
             .setCustomId('pause')
             .setLabel('⏸️')
-            .setStyle('PRIMARY')
+            .setStyle(ButtonStyle.Primary)
         )
         .addComponents(
-            new MessageButton()
+            new ButtonBuilder()
             .setCustomId('skip')
             .setLabel('⏭️')
-            .setStyle('PRIMARY')
+            .setStyle(ButtonStyle.Primary)
         )
         .addComponents(
-            new MessageButton()
+            new ButtonBuilder()
             .setCustomId('stop')
             .setLabel('⏹️')
-            .setStyle('DANGER')
+            .setStyle(ButtonStyle.Danger)
         );
 
         const btnfilter = (msg: MessageComponentInteraction) => msg.member.user.id === message.author.id;
         const collector = message.channel.createMessageComponentCollector({ filter: btnfilter, time: 60000 });
 
-        collector.on('collect', async (msg) => {
+        collector.on('collect', async (msg: ButtonInteraction) => {
 
             if (msg.customId === 'resume') {
-                const queue = player.getQueue(message.guild.id);
-                if (queue.setPaused(false)) return msg.reply({content: '**Lagu berlangsung**'});
-                queue.setPaused(false);
-                await msg.reply({content: '**Lagu telah diresume**'});
-                collector.stop();
+                if (queue.node.isPaused() === true) {
+                    queue.node.setPaused(false);
+                    await msg.reply({content: '**Lagu telah diputar**'});
+                    return;
+                } else if (queue.node.isPaused() === false) {
+                    msg.reply({content: '**Lagu sedang diputar**'});
+                    return;
+                }
             }
-
+            
             if (msg.customId === 'pause') {
-                const queue = player.getQueue(message.guild.id);
-                if (queue.setPaused(true)) return msg.reply({content: '**Lagu dipause**'});
-                queue.setPaused(true);
-                await msg.reply({content: '**Lagu telah dipause**'});
-                collector.stop();
+                if (queue.node.isPaused() ===  false) {
+                    queue.node.setPaused(true);
+                    await msg.reply({content: '**Lagu telah dipause**'});
+                    return;
+                } else if (queue.node.isPaused() == true) {
+                    msg.reply({content: '**Lagu sedang dipause**'});
+                    return;
+                }
             }
-
+            
             if (msg.customId === 'skip') {
-                const queue = player.getQueue(message.guild.id);
-                queue.skip();
-                await msg.reply({content: '**Lagu diskip**'});
-                collector.stop();
-            }
-
+                queue.node.skip();
+                await msg.reply({content: '**Lagu telah diskip**'});
+                return;
+            } 
+            
             if (msg.customId === 'stop') {
-                const queue = player.getQueue(message.guild.id);
-                queue.destroy();
+                queue.delete();
                 await msg.reply({content: '**Lagu distop**'});
-                collector.stop();
+                return;
             }
     
             collector.on('end', (collected) => console.log(collected.size));
 
         });
 
-        message.reply({embeds: [nowplayingembed], components: [button]}).then((msg) => {
+        await message.reply({embeds: [nowplayingembed], components: [row]}).then((msg) => {
                 setTimeout(() => {
-                    button.components[0].setDisabled(true);
-                    button.components[1].setDisabled(true);
-                    button.components[2].setDisabled(true);
-                    button.components[3].setDisabled(true);
-                    msg.edit({components: [button]});
+                    row.components[0].setDisabled(true);
+                    row.components[1].setDisabled(true);
+                    row.components[2].setDisabled(true);
+                    row.components[3].setDisabled(true);
+                    msg.edit({components: [row]});
                     collector.stop();
-                }, 10000);
+                }, 5000);
             }
         );
-    },
+    }
 };
