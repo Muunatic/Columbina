@@ -1,5 +1,5 @@
-import path = require('node:path');
-import fs = require('fs');
+import path from 'node:path';
+import fs from 'node:fs';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v10';
 import { token, clientId } from './src/data/config';
