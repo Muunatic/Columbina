@@ -2,6 +2,7 @@ import { player, Message } from '../../client';
 
 module.exports = {
     name: 'skip',
+    aliases: ['next'],
     async execute(message: Message) {
         const queue = player.nodes.get(message.guild.id);
         if (queue?.isPlaying() == null || queue.isPlaying() == false) return message.reply('**Tidak ada music yang berjalan**');
