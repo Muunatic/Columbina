@@ -3,8 +3,8 @@ import { DefaultError } from '../../structures/error';
 
 module.exports = {
     name: 'play',
-    async execute(message: Message, args: any) {
-        const query = args.join(' ');
+    async execute(message: Message, args: Array<string>) {
+        const query = args.join(' ').toString();
         const queue = player.nodes.create(message.guild, {
             selfDeaf: true,
             leaveOnEnd: true,
@@ -30,6 +30,7 @@ module.exports = {
 
         const track = await player.search(query, {
             searchEngine: "youtube",
+            ignoreCache: true,
             requestedBy: message.author
         }).then(x => x.tracks[0]);
         if (!track) return await message.channel.send({ content: DefaultError });

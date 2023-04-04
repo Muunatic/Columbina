@@ -1,5 +1,5 @@
 console.info('Loading events.ts');
-import { client, player, GuildQueue } from '../client';
+import { client, player, GuildQueue, Track } from '../client';
 
 client.on('shardDisconnect', () => {
     console.log('Disconnect');
@@ -13,7 +13,7 @@ player.events.on('emptyChannel', (queue: GuildQueue<any>) => {
     queue.metadata.channel.send('**Tidak ada member di voice**');
 });
 
-player.events.on('playerStart', (queue: GuildQueue<any>, track) => {
+player.events.on('playerStart', (queue: GuildQueue<any>, track: Track) => {
     queue.metadata.channel.send(`Memutar lagu **${track.title}**`);
 });
 
