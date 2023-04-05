@@ -2,7 +2,7 @@ import { Client, GatewayIntentBits, Partials, Collection, ActivityType, EmbedBui
 import { Player, GuildQueue, QueueRepeatMode, Track } from 'discord-player';
 
 const client = new Client({
-    
+
     intents: [
         GatewayIntentBits.DirectMessages,
         GatewayIntentBits.DirectMessageReactions,
@@ -44,22 +44,22 @@ const player = new Player(client, {
 });
 
 export {
-    ActionRowBuilder, 
-    ActivityType, 
-    BaseGuildTextChannel, 
-    ButtonBuilder, 
-    ButtonInteraction, 
-    ButtonStyle, 
-    client, 
-    Collection, 
+    ActionRowBuilder,
+    ActivityType,
+    BaseGuildTextChannel,
+    ButtonBuilder,
+    ButtonInteraction,
+    ButtonStyle,
+    client,
+    Collection,
     CommandInteraction,
-    EmbedBuilder, 
-    GuildQueue, 
-    Interaction, 
-    Message, 
-    MessageComponentInteraction, 
-    Player, 
-    player, 
-    QueueRepeatMode, 
+    EmbedBuilder,
+    GuildQueue,
+    Interaction,
+    Message,
+    MessageComponentInteraction,
+    Player,
+    player,
+    QueueRepeatMode,
     Track
 };

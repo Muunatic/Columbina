@@ -15,7 +15,7 @@ module.exports = {
         .addFields({ name: 'General command', value: 'search, play, skip, stop, volume, repeat, pause, resume, queue, nowplaying' })
         .setFooter({text: `Direquest oleh ${interaction.user.username}`, iconURL: interaction.user.avatarURL({extension: 'png', forceStatic: false, size: 1024})})
         .setTimestamp();
-        
+
         interaction.reply({embeds: [embed]});
     }
 };

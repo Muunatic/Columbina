@@ -11,9 +11,9 @@ client.on('messageCreate', async (message: Message) => {
 
     if (!message.content.startsWith(prefix) || message.author.bot) return;
     if (!message.guild) return;
-    
+
     if (!cmd) return;
-    
+
     try {
         cmd.execute(message, args);
     } catch (error) {

@@ -5,9 +5,10 @@ module.exports = {
     name: 'nowplaying',
     async execute(message: Message) {
         const queue = player.nodes.get(message.guild.id);
+        if (queue?.isPlaying() == null || queue.isPlaying() == false) return message.reply('**Tidak ada music yang berjalan**');
         if (!message.member.voice.channel) return message.reply('**Kamu tidak divoice channel!**');
         if (message.guild.members.me.voice.channel && message.member.voice.channel.id !== message.guild.members.me.voice.channel.id) return message.reply('**Kamu tidak divoice channel yang sama!**');
-        
+
         const nowplayingembed = new EmbedBuilder()
         .setColor('#89e0dc')
         .setTitle(queue.currentTrack.title)
@@ -23,7 +24,7 @@ module.exports = {
             {name: 'Progress Bar', value: `${queue.node.createProgressBar()}`, inline: true}
         )
         .setTimestamp();
-        
+
         const row = new ActionRowBuilder<ButtonBuilder>()
         .addComponents(
             new ButtonBuilder()
@@ -65,7 +66,7 @@ module.exports = {
                     return;
                 }
             }
-            
+
             if (msg.customId === 'pause') {
                 if (queue.node.isPaused() ===  false) {
                     queue.node.setPaused(true);
@@ -76,19 +77,19 @@ module.exports = {
                     return;
                 }
             }
-            
+
             if (msg.customId === 'skip') {
                 queue.node.skip();
                 await msg.reply({content: '**Lagu telah diskip**'});
                 return;
-            } 
-            
+            }
+
             if (msg.customId === 'stop') {
                 queue.delete();
                 await msg.reply({content: '**Lagu distop**'});
                 return;
             }
-    
+
             collector.on('end', (collected) => console.log(collected.size));
 
         });
