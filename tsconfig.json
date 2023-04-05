@@ -4,8 +4,8 @@
       "target": "ES2021",
       "outDir": "dist",
       "lib": [
-      "ES2021",
-      "dom"
+        "ES2021",
+        "dom"
       ],
       "alwaysStrict": true,
       "allowJs": false,
@@ -15,6 +15,7 @@
       "inlineSourceMap": true,
       "inlineSources": true,
       "newLine": "lf",
+      "moduleResolution": "node",
       "noEmitOnError": true,
       "noImplicitAny": true,
       "skipLibCheck": true,
