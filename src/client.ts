@@ -1,5 +1,5 @@
 import { Client, GatewayIntentBits, Partials, Collection, ActivityType, EmbedBuilder, Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, ButtonInteraction, BaseGuildTextChannel, MessageComponentInteraction, Interaction, CommandInteraction } from 'discord.js';
-import { Player, GuildQueue, QueueRepeatMode, Track } from 'discord-player';
+import { Player, GuildQueue, QueueRepeatMode, SearchResult, Track } from 'discord-player';
 
 const client = new Client({
 
@@ -61,5 +61,6 @@ export {
     Player,
     player,
     QueueRepeatMode,
+    SearchResult,
     Track
 };
