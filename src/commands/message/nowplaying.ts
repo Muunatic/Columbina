@@ -13,12 +13,12 @@ module.exports = {
         .setColor('#89e0dc')
         .setTitle(queue.currentTrack.title)
         .setThumbnail(queue.currentTrack.thumbnail)
-        .setFooter({text: queue.currentTrack.url, iconURL: message.client.user.avatarURL({extension: 'png', forceStatic: false, size: 1024})})
+        .setFooter({text: `Listening on ${queue.currentTrack.url}`, iconURL: message.client.user.avatarURL({extension: 'png', forceStatic: false, size: 1024})})
         .addFields(
             {name: 'Channel', value: `${queue.currentTrack.author}`, inline: true},
             {name: 'Requested by', value: `${queue.currentTrack.requestedBy.username}`, inline: true},
             {name: 'Duration', value: `${queue.currentTrack.duration}`, inline: true},
-            {name: 'Source', value: `${queue.currentTrack.source}`, inline: true},
+            {name: 'Source', value: `[${queue.currentTrack.source}](${queue.currentTrack.url})`, inline: true},
             {name: 'Views', value: `${queue.currentTrack.views}`, inline: true},
             {name: 'ID', value: `${queue.currentTrack.id}`, inline: true},
             {name: 'Progress Bar', value: `${queue.node.createProgressBar()}`, inline: true}
