@@ -57,14 +57,18 @@ module.exports = {
             time: 60000
         });
 
-        collector.on('collect', async (msg: Message): Promise<any | Message> => {
+        collector.on('collect', async (msg: Message) => {
             const value = parseInt(msg.content);
-            if (msg.content.toLowerCase() === 'cancel') return message.reply('**Query dibatalkan**') && collector.stop();
-            if (!value || value < 0 || value > 5) return message.reply(DefaultError);
-            await message.channel.send({ content: `Menambahkan lagu **${track.tracks[value - 1].title}** di **${message.member.voice.channel.name}...**` });
-            collector.stop();
-            queue.addTrack(track.tracks[value - 1]);
-            if (!queue.node.isPlaying()) await queue.node.play();
+            if (msg.content.toLowerCase() === 'cancel') return msg.reply('**Query dibatalkan**') && collector.stop();
+            if (!value || value < 0 || value > 5) {
+                msg.reply(DefaultError);
+                return;
+            } else {
+                await message.channel.send({ content: `Menambahkan lagu **${track.tracks[value - 1].title}** di **${message.member.voice.channel.name}...**` });
+                collector.stop();
+                queue.addTrack(track.tracks[value - 1]);
+                if (!queue.node.isPlaying()) await queue.node.play();
+            }
         });
     }
 };
