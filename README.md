@@ -1,14 +1,14 @@
 ***
 
 <p align="center">
-<img src="https://media.discordapp.net/attachments/945764804403036231/958419428058464287/ba3d8bb8c6072d30d650c6a0d6dec00b.jpg" width="256" height="256">
+<img src="https://cdn.discordapp.com/attachments/1073551201322409994/1096421150994739210/b922e80d33e7901f7569df73f9530a0c.png" width="256" height="256">
 <p align="center">
 
-<img src="https://img.shields.io/github/repo-size/Muunatic/Vladilena?style=flat-square">
-<img src="https://img.shields.io/github/package-json/v/Muunatic/Vladilena?style=flat-square">
-<img src="https://img.shields.io/snyk/vulnerabilities/github/Muunatic/Vladilena?style=flat-square">
+<img src="https://img.shields.io/github/repo-size/Muunatic/Columbina?style=flat-square">
+<img src="https://img.shields.io/github/package-json/v/Muunatic/Columbina?style=flat-square">
+<img src="https://img.shields.io/snyk/vulnerabilities/github/Muunatic/Columbina?style=flat-square">
 
-<h3 align="center">Vladilena Milizé</h3>
+<h3 align="center">Columbina Damselette</h3>
 
 ***
 
@@ -16,8 +16,8 @@
 
 |Tools|Version|
 |-|-|
-|**Node.JS**|**>=16.19.0**|
-|**NPM**|**>=8.19.3**|
+|**Node.JS**|**>=18.16.0**|
+|**NPM**|**>=9.5.1**|
 
 ## How to use
 
@@ -50,17 +50,16 @@ npm start
 
 |Version|Vulnerability|
 |-|-|
-|2.1.x|:white_check_mark:|
-|2.0.x|:x:|
+|3.0.x|:white_check_mark:|
 
 Click redirect for more info.
 <br>
-<a href="https://github.com/Muunatic/Vladilena/security/policy">**Redirect**</a>
+<a href="https://github.com/Muunatic/Columbina/security/policy">**Redirect**</a>
 
 ## Disclaimer
 
-This file is part of the Vladilena project.
+This file is part of the Columbina project.
 <br>
-Vladilena project is licensed under the AGPL-3.0 License.
+Columbina project is licensed under the AGPL-3.0 License.
 <br>
-<a href="https://github.com/Muunatic/Vladilena/blob/v2/LICENSE">**Redirect**</a>
+<a href="https://github.com/Muunatic/Columbina/blob/v3/LICENSE">**Redirect**</a>

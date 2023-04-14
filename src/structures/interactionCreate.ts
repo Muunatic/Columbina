@@ -8,9 +8,9 @@ client.on('interactionCreate', async (interaction: Interaction) => {
     if (!interaction.guild) return;
 
     const command = client.commands.get(interaction.commandName);
-    
+
     if (!command) return;
-    
+
     try {
         await command.execute(interaction);
     } catch (error) {
