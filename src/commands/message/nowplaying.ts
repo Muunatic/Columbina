@@ -1,5 +1,4 @@
-import { EmbedBuilder, ButtonBuilder, ButtonStyle, ButtonInteraction, Message, ActionRowBuilder, MessageComponentInteraction } from '../../client';
-import { player } from '../../client';
+import { player, EmbedBuilder, ButtonBuilder, ButtonStyle, ButtonInteraction, Message, ActionRowBuilder, MessageComponentInteraction } from '../../client';
 
 module.exports = {
     name: 'nowplaying',
@@ -13,7 +12,7 @@ module.exports = {
         .setColor('#89e0dc')
         .setTitle(queue.currentTrack.title)
         .setThumbnail(queue.currentTrack.thumbnail)
-        .setFooter({text: `Listening on ${queue.currentTrack.url}`, iconURL: message.client.user.avatarURL({extension: 'png', forceStatic: false, size: 1024})})
+        .setFooter({text: `Listening on ${queue.currentTrack.source}`, iconURL: message.client.user.avatarURL({extension: 'png', forceStatic: false, size: 1024})})
         .addFields(
             {name: 'Channel', value: `${queue.currentTrack.author}`, inline: true},
             {name: 'Requested by', value: `${queue.currentTrack.requestedBy.username}`, inline: true},
@@ -95,15 +94,14 @@ module.exports = {
         });
 
         await message.reply({embeds: [nowplayingembed], components: [row]}).then((msg) => {
-                setTimeout(() => {
-                    row.components[0].setDisabled(true);
-                    row.components[1].setDisabled(true);
-                    row.components[2].setDisabled(true);
-                    row.components[3].setDisabled(true);
-                    msg.edit({components: [row]});
-                    collector.stop();
-                }, 5000);
-            }
-        );
+            setTimeout(() => {
+                row.components[0].setDisabled(true);
+                row.components[1].setDisabled(true);
+                row.components[2].setDisabled(true);
+                row.components[3].setDisabled(true);
+                msg.edit({components: [row]});
+                collector.stop();
+            }, 5000);
+        });
     }
 };
