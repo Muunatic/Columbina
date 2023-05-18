@@ -1,5 +1,4 @@
-import { Message } from 'discord.js';
-import { player } from '../../client';
+import { player, Message } from '../../client';
 
 module.exports = {
     name: 'volume',
@@ -10,6 +9,6 @@ module.exports = {
         if (message.guild.members.me.voice.channel && message.member.voice.channel.id !== message.guild.members.me.voice.channel.id) return message.reply('**Kamu tidak divoice channel yang sama!**');
         if (!args[0] || Math.round(parseInt(args[0])) < 1 || Math.round(parseInt(args[0])) > 100) return message.reply('**berikan nomor 1 - 100 !**');
         queue.node.setVolume(parseInt(args[0]));
-        message.reply(`Volume telah diubah ke ${args[0]}%`);
+        message.reply(`Volume telah diubah ke **${args[0]}%**`);
     }
 };
