@@ -10,6 +10,7 @@ Please report security issues to [Muunatic](mailto:muunatic@muunatic.me)
   
   |Version|Vulnerability|
   |-|-|
+  |3.0.1|:heavy_check_mark:|
   |3.0.0|:heavy_check_mark:|
 
 </details>
