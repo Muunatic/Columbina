@@ -1,5 +1,4 @@
-import { Message } from 'discord.js';
-import { player } from '../../client';
+import { player, Message } from '../../client';
 
 module.exports = {
     name: 'stop',

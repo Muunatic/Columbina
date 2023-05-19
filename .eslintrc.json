@@ -22,10 +22,13 @@
         "no-unused-vars": 1,
         "no-useless-escape": 0,
         "no-trailing-spaces": 1,
+        "indent": ["warn", 4, {
+            "MemberExpression": 0
+        }],
         "comma-dangle": ["error", "never"],
         "comma-style": ["warn", "last"],
         "eol-last": ["warn", "always"],
-        "semi": "warn",
-        "semi-style": ["warn", "last"]
+        "semi": "error",
+        "semi-style": ["error", "last"]
     }
 }

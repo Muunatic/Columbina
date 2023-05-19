@@ -22,7 +22,6 @@ module.exports = {
             if (!queue.connection) await queue.connect(message.member.voice.channel);
         } catch {
             queue.delete();
-            message.channel.send({});
             return await message.reply({ content: DefaultError });
         }
 
