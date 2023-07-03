@@ -1,4 +1,4 @@
-import { player, Message, QueueRepeatMode } from '../../client';
+import { Message, QueueRepeatMode, player } from '../../client';
 
 module.exports = {
     name: 'repeat',

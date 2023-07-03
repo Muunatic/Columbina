@@ -1,4 +1,4 @@
-import { player, Message, Track } from '../../client';
+import { Message, Track, player } from '../../client';
 import { DefaultError } from '../../structures/error';
 
 module.exports = {

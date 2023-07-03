@@ -1,7 +1,7 @@
 console.info('Loading handler.ts');
 import path from 'node:path';
 import fs from 'node:fs';
-import { client, Collection } from '../client';
+import { Collection, client } from '../client';
 
 declare module "discord.js" {
     export interface Client {

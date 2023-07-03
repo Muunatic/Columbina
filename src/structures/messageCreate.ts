@@ -1,5 +1,5 @@
 console.info('Loading messageCreate.ts');
-import { client, Message } from '../client';
+import { Message, client } from '../client';
 import { prefix } from '../data/config';
 import { DefaultError } from '../structures/error';
 

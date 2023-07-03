@@ -1,4 +1,4 @@
-import { player, Message } from '../../client';
+import { Message, player } from '../../client';
 
 module.exports = {
     name: 'stop',

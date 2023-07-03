@@ -1,5 +1,5 @@
 console.info('Loading interactionCreate.ts');
-import { client, Interaction } from '../client';
+import { Interaction, client } from '../client';
 import { DefaultError } from '../structures/error';
 
 client.on('interactionCreate', async (interaction: Interaction) => {

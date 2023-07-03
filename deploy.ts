@@ -2,7 +2,7 @@ import path from 'node:path';
 import fs from 'node:fs';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v10';
-import { token, clientId } from './src/data/config';
+import { clientId, token } from './src/data/config';
 
 const commands: string[] = [];
 const commandsPath = path.join(__dirname, './src/commands/interaction');

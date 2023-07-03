@@ -1,4 +1,4 @@
-import { player, EmbedBuilder, ButtonBuilder, ButtonStyle, ButtonInteraction, Message, ActionRowBuilder, MessageComponentInteraction } from '../../client';
+import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, EmbedBuilder, Message, MessageComponentInteraction, player } from '../../client';
 
 module.exports = {
     name: 'nowplaying',
