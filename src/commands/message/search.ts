@@ -1,4 +1,4 @@
-import { player, Message, EmbedBuilder, SearchResult } from '../../client';
+import { EmbedBuilder, Message, SearchResult, player } from '../../client';
 import { DefaultError } from '../../structures/error';
 
 module.exports = {
@@ -41,10 +41,13 @@ module.exports = {
                 requestedBy: message.author
             });
         }
+
         if (!track) return await message.channel.send({ content: DefaultError });
+        if (!track.tracks[4]?.title) return await message.channel.send({ content: DefaultError });
 
         const embed = new EmbedBuilder()
         .setColor('#89e0dc')
+        .setThumbnail(track.tracks[0].thumbnail)
         .setAuthor({name: 'Pilih angka untuk memulai lagu, ketik cancel untuk membatalkan', iconURL: message.client.user.avatarURL({extension: 'png', forceStatic: false, size : 1024})})
         .setDescription('**1. ' + track.tracks[0].title + '\n' + '2. ' + track.tracks[1].title + '\n' + '3. ' + track.tracks[2].title + '\n' + '4. ' + track.tracks[3].title + '\n'  + '5. ' + track.tracks[4].title + '\n**')
         .setFooter({text: `Direquest oleh ${message.member.nickname || message.author.username}`, iconURL: message.author.avatarURL({extension: 'png', forceStatic: false, size : 1024})})
@@ -67,6 +70,7 @@ module.exports = {
                 collector.stop();
                 queue.addTrack(track.tracks[value - 1]);
                 if (!queue.node.isPlaying()) await queue.node.play();
+                return;
             }
         });
     }
