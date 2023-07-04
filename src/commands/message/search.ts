@@ -16,6 +16,9 @@ module.exports = {
         });
 
         if (!message.member.voice.channel) return message.reply('**Kamu tidak divoice channel!**');
+
+        if (message.guild.members.me.voice.channel && message.member.voice.channel.id !== message.guild.members.me.voice.channel.id) return message.reply('**Kamu tidak divoice channel yang sama!**');
+
         if (!args[0]) return message.reply('**Berikan judul untuk mencari lagu**');
 
         try {
@@ -24,8 +27,6 @@ module.exports = {
             queue.delete();
             return await message.reply({ content: DefaultError });
         }
-
-        if (message.guild.members.me.voice.channel && message.member.voice.channel.id !== message.guild.members.me.voice.channel.id) return message.reply('**Kamu tidak divoice channel yang sama!**');
 
         let track: SearchResult;
         if (new RegExp('\\b' + "https://open.spotify.com/track/" + '\\b', 'i').test(query)) {
