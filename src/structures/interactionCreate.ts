@@ -1,6 +1,6 @@
 console.info('Loading interactionCreate.ts');
 import { Interaction, client } from '../client';
-import { DefaultError } from '../structures/error';
+import { defaultError } from '../structures/error';
 
 client.on('interactionCreate', async (interaction: Interaction) => {
 
@@ -15,7 +15,7 @@ client.on('interactionCreate', async (interaction: Interaction) => {
         await command.execute(interaction);
     } catch (error) {
         console.error(error);
-        await interaction.reply({ content: DefaultError, ephemeral: true });
+        await interaction.reply({ content: defaultError, ephemeral: true });
     }
 
 });
