@@ -12,10 +12,10 @@ module.exports = {
         .setColor('#89e0dc')
         .setTitle('Help commands')
         .setDescription(`Prefix = **${prefix}**`)
-        .addFields({ name: 'General command', value: 'search, play, skip, stop, volume, repeat, pause, resume, queue, nowplaying' })
+        .addFields({ name: 'General command', value: 'search, play, skip, stop, volume, repeat, pause, resume, queue, nowplaying, download' })
         .setFooter({text: `Direquest oleh ${interaction.user.username}`, iconURL: interaction.user.avatarURL({extension: 'png', forceStatic: false, size: 1024})})
         .setTimestamp();
 
-        interaction.reply({embeds: [embed]});
+        await interaction.reply({embeds: [embed]});
     }
 };

@@ -9,6 +9,6 @@ module.exports = {
         if (message.guild.members.me.voice.channel && message.member.voice.channel.id !== message.guild.members.me.voice.channel.id) return message.reply('**Kamu tidak divoice channel yang sama!**');
         if (queue.node.isPaused() == false) return message.reply('**Lagu sedang berlangsung**');
         queue.node.setPaused(false);
-        message.reply('**Lagu dilanjutkan**');
+        await message.reply('**Lagu dilanjutkan**');
     }
 };

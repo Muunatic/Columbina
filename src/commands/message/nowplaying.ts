@@ -8,7 +8,7 @@ module.exports = {
         if (!message.member.voice.channel) return message.reply('**Kamu tidak divoice channel!**');
         if (message.guild.members.me.voice.channel && message.member.voice.channel.id !== message.guild.members.me.voice.channel.id) return message.reply('**Kamu tidak divoice channel yang sama!**');
 
-        const nowplayingembed = new EmbedBuilder()
+        const embed = new EmbedBuilder()
         .setColor('#89e0dc')
         .setTitle(queue.currentTrack.title)
         .setThumbnail(queue.currentTrack.thumbnail)
@@ -50,8 +50,8 @@ module.exports = {
             .setStyle(ButtonStyle.Danger)
         );
 
-        const btnfilter = (msg: MessageComponentInteraction) => msg.member.user.id === message.author.id;
-        const collector = message.channel.createMessageComponentCollector({ filter: btnfilter, time: 60000 });
+        const btnFilter = (msg: MessageComponentInteraction): boolean => msg.member.user.id === message.author.id;
+        const collector = message.channel.createMessageComponentCollector({ filter: btnFilter, time: 60000 });
 
         collector.on('collect', async (msg: ButtonInteraction) => {
 
@@ -61,7 +61,7 @@ module.exports = {
                     await msg.reply({content: '**Lagu telah diputar**'});
                     return;
                 } else if (queue.node.isPaused() === false) {
-                    msg.reply({content: '**Lagu sedang diputar**'});
+                    await msg.reply({content: '**Lagu sedang diputar**'});
                     return;
                 }
             }
@@ -72,7 +72,7 @@ module.exports = {
                     await msg.reply({content: '**Lagu telah dipause**'});
                     return;
                 } else if (queue.node.isPaused() == true) {
-                    msg.reply({content: '**Lagu sedang dipause**'});
+                    await msg.reply({content: '**Lagu sedang dipause**'});
                     return;
                 }
             }
@@ -93,14 +93,16 @@ module.exports = {
 
         });
 
-        await message.reply({embeds: [nowplayingembed], components: [row]}).then((msg) => {
+        await message.reply({embeds: [embed], components: [row]}).then((msg) => {
             setTimeout(() => {
-                row.components[0].setDisabled(true);
-                row.components[1].setDisabled(true);
-                row.components[2].setDisabled(true);
-                row.components[3].setDisabled(true);
-                msg.edit({components: [row]});
-                collector.stop();
+                (async () => {
+                    row.components[0].setDisabled(true);
+                    row.components[1].setDisabled(true);
+                    row.components[2].setDisabled(true);
+                    row.components[3].setDisabled(true);
+                    await msg.edit({components: [row]});
+                    collector.stop();
+                })().catch((err) => console.log(err));
             }, 5000);
         });
     }
