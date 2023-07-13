@@ -1,9 +1,9 @@
 import { Message, Track, player } from '../../client';
-import { DefaultError } from '../../structures/error';
+import { defaultError } from '../../structures/error';
 
 module.exports = {
     name: 'play',
-    async execute(message: Message, args: Array<string>) {
+    async execute(message: Message, args: ReadonlyArray<string>) {
         const query = args.join(' ').toString();
         const queue = player.nodes.create(message.guild, {
             selfDeaf: true,
@@ -19,13 +19,15 @@ module.exports = {
 
         if (message.guild.members.me.voice.channel && message.member.voice.channel.id !== message.guild.members.me.voice.channel.id) return message.reply('**Kamu tidak divoice channel yang sama!**');
 
+        if (message.member.voice.channel.full == true) return message.reply('**Voice channel full!**');
+
         if (!args[0]) return message.reply('**Berikan judul untuk memulai lagu**');
 
         try {
             if (!queue.connection) await queue.connect(message.member.voice.channel);
         } catch {
             queue.delete();
-            return await message.reply({ content: DefaultError });
+            return message.reply({ content: defaultError });
         }
 
         let track: Track;
@@ -42,10 +44,10 @@ module.exports = {
                 requestedBy: message.author
             }).then(x => x.tracks[0]);
         }
-        if (!track) return await message.channel.send({ content: DefaultError });
+        if (!track) return message.channel.send({ content: defaultError });
 
         await queue.node.play(track);
 
-        return await message.channel.send({ content: `Menambahkan lagu **${track.title}** di **${message.member.voice.channel.name}...**` });
+        return message.channel.send({ content: `Menambahkan lagu **${track.title}** di **${message.member.voice.channel.name}...**` });
     }
 };
