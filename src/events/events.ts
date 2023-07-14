@@ -1,5 +1,5 @@
 console.info('Loading events.ts');
-import { client, player, GuildQueue, Track } from '../client';
+import { GuildQueue, Track, client, player } from '../client';
 
 client.on('shardDisconnect', () => {
     console.log('Disconnect');

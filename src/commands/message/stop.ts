@@ -1,4 +1,4 @@
-import { player, Message } from '../../client';
+import { Message, player } from '../../client';
 
 module.exports = {
     name: 'stop',
@@ -8,6 +8,6 @@ module.exports = {
         if (!message.member.voice.channel) return message.reply('**Kamu tidak divoice channel!**');
         if (message.guild.members.me.voice.channel && message.member.voice.channel.id !== message.guild.members.me.voice.channel.id) return message.reply('**Kamu tidak divoice channel yang sama!**');
         queue.delete();
-        message.reply('**Lagu telah distop**');
+        await message.reply('**Lagu telah distop**');
     }
 };

@@ -12,4 +12,4 @@ process.on('uncaughtExceptionMonitor', (error) => {
     console.error('uncaughtExceptionMonitor:', error);
 });
 
-export const DefaultError = '**Error**';
+export const defaultError = '**Error**';
