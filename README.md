@@ -6,7 +6,7 @@
 
 <img src="https://img.shields.io/github/repo-size/Muunatic/Columbina?style=flat-square">
 <img src="https://img.shields.io/github/package-json/v/Muunatic/Columbina?style=flat-square">
-<img src="https://img.shields.io/snyk/vulnerabilities/github/Muunatic/Columbina?style=flat-square">
+<img src="https://img.shields.io/github/languages/top/Muunatic/RyU?style=flat-square">
 
 <h3 align="center">Columbina Damselette</h3>
 
@@ -16,7 +16,7 @@
 
 |Tools|Version|
 |-|-|
-|**Node.JS**|**>=18.16.0**|
+|**Node.JS**|**>=18.16.1**|
 |**NPM**|**>=9.5.1**|
 
 ## How to use
@@ -50,11 +50,18 @@ npm start
 
 |Version|Vulnerability|
 |-|-|
-|3.0.x|:white_check_mark:|
+|3.1.x|:white_check_mark:|
+|3.0.x|:x:|
 
 Click redirect for more info.
 <br>
 <a href="https://github.com/Muunatic/Columbina/security/policy">**Redirect**</a>
+
+## Contributing
+
+Contributions to this project are welcome.
+<br>
+To contribute, please see this <a href="https://github.com/Muunatic/Columbina/blob/v3/CONTRIBUTING.md">**Contribution Guide**</a> and adhere to <a href="https://github.com/Muunatic/Columbina/blob/v3/CONTRIBUTING.md">**Code Of Conduct**</a>.
 
 ## Disclaimer
 
