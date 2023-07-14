@@ -1,5 +1,7 @@
-import { Client, GatewayIntentBits, Partials, Collection, ActivityType, EmbedBuilder, Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, ButtonInteraction, BaseGuildTextChannel, MessageComponentInteraction, Interaction, CommandInteraction } from 'discord.js';
-import { Player, GuildQueue, QueueRepeatMode, SearchResult, Track } from 'discord-player';
+import { ActionRowBuilder, ActivityType, BaseGuildTextChannel, ButtonBuilder, ButtonInteraction, ButtonStyle, Client, Collection, CommandInteraction, EmbedBuilder, GatewayIntentBits, Interaction, Message, MessageComponentInteraction, Partials } from 'discord.js';
+import { GuildQueue, Player, QueueRepeatMode, SearchResult, Track } from 'discord-player';
+import { SpotifyExtractor, YoutubeExtractor} from '@discord-player/extractor';
+import { token } from '../src/data/config';
 
 const client = new Client({
 
@@ -43,6 +45,12 @@ const player = new Player(client, {
     }
 });
 
+
+(async () => {
+    await player.extractors.register(YoutubeExtractor, {});
+    await player.extractors.register(SpotifyExtractor, {});
+})().catch((error: Error) => console.log(error.message));
+
 export {
     ActionRowBuilder,
     ActivityType,
@@ -50,7 +58,6 @@ export {
     ButtonBuilder,
     ButtonInteraction,
     ButtonStyle,
-    client,
     Collection,
     CommandInteraction,
     EmbedBuilder,
@@ -59,8 +66,10 @@ export {
     Message,
     MessageComponentInteraction,
     Player,
-    player,
     QueueRepeatMode,
     SearchResult,
-    Track
+    Track,
+    client,
+    player,
+    token
 };
