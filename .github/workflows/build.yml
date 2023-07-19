@@ -1,0 +1,27 @@
+name: Run TypeScript Compiler
+
+on:
+  push:
+    branches:
+    - 'v3'
+    - 'develop'
+  pull_request:
+    branches:
+    - 'v3'
+    - 'develop'
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18.16.1'
+    - name: Install npm
+      run: npm install npm@9.5.1 -g
+    - name: Install dependencies
+      run: npm ci
+    - name: Run typescript compiler
+      run: npm run build
