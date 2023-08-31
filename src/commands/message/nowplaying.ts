@@ -1,9 +1,11 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, EmbedBuilder, Message, MessageComponentInteraction, player } from '../../client';
+import ytdl from 'ytdl-core';
 
 module.exports = {
     name: 'nowplaying',
     async execute(message: Message) {
         const queue = player.nodes.get(message.guild.id);
+        const srcInfo = ytdl.getInfo(queue.currentTrack.url);
         if (queue?.isPlaying() == null || queue.isPlaying() == false) return message.reply('**Tidak ada music yang berjalan**');
         if (!message.member.voice.channel) return message.reply('**Kamu tidak divoice channel!**');
         if (message.guild.members.me.voice.channel && message.member.voice.channel.id !== message.guild.members.me.voice.channel.id) return message.reply('**Kamu tidak divoice channel yang sama!**');
@@ -11,7 +13,7 @@ module.exports = {
         const embed = new EmbedBuilder()
         .setColor('#89e0dc')
         .setTitle(queue.currentTrack.title)
-        .setThumbnail(queue.currentTrack.thumbnail)
+        .setThumbnail(queue.currentTrack.thumbnail || (await srcInfo).videoDetails.thumbnails[0].url)
         .setFooter({text: `Listening on ${queue.currentTrack.source}`, iconURL: message.client.user.avatarURL({extension: 'png', forceStatic: false, size: 1024})})
         .addFields(
             {name: 'Channel', value: `${queue.currentTrack.author}`, inline: true},
