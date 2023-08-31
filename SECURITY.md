@@ -1,6 +1,6 @@
 # Vulnerability
 
-Please report security issues to [Muunatic](mailto:contact@muunatic.me)
+Please report security issues to [Muunatic](mailto:muunatic@typeslint.com)
 
 <details open>
 
