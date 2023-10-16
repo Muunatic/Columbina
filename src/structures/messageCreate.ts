@@ -15,7 +15,7 @@ client.on('messageCreate', async (message: Message) => {
     if (!cmd) return;
 
     try {
-        cmd.execute(message, args);
+        await cmd.execute(message, args);
     } catch (error) {
         console.error(error);
         await message.reply(defaultError);
