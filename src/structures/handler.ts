@@ -5,7 +5,7 @@ import { Collection, client } from '../client';
 
 declare module "discord.js" {
     export interface Client {
-      commands: Collection<unknown, any>
+      commands: Collection<unknown, { execute: (message: Message<boolean> | Interaction<CacheType>, args?: string[]) => Promise<void>; name: string; aliases: ReadonlyArray<string>; }>
     }
 }
 
