@@ -24,7 +24,7 @@
         "@typescript-eslint/explicit-function-return-type": ["warn", {
             "allowExpressions": true
         }],
-        "@typescript-eslint/no-explicit-any": 0,
+        "@typescript-eslint/no-explicit-any": 2,
         "@typescript-eslint/no-unsafe-argument": 0,
         "@typescript-eslint/no-unsafe-assignment": 0,
         "@typescript-eslint/no-unsafe-call": 0,
@@ -45,7 +45,6 @@
         }],
         "no-return-await": 1,
         "no-trailing-spaces": 1,
-        "no-unused-vars": 1,
         "no-useless-escape": 0,
         "semi": "error",
         "semi-style": ["error", "last"],
