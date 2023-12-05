@@ -61,7 +61,7 @@ Click redirect for more info.
 
 Contributions to this project are welcome.
 <br>
-To contribute, please see this <a href="https://github.com/Muunatic/Columbina/blob/v3/CONTRIBUTING.md">**Contribution Guide**</a> and adhere to <a href="https://github.com/Muunatic/Columbina/blob/v3/CONTRIBUTING.md">**Code Of Conduct**</a>.
+To contribute, please see this <a href="https://github.com/Muunatic/Columbina/blob/v3/CONTRIBUTING.md">**Contribution Guide**</a> and adhere to <a href="https://github.com/Muunatic/Columbina/blob/v3/CODE_OF_CONDUCT.md">**Code Of Conduct**</a>.
 
 ## Disclaimer
 
