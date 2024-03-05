@@ -1,7 +1,7 @@
 ***
 
 <p align="center">
-<img src="https://cdn.discordapp.com/attachments/1073551201322409994/1096421150994739210/b922e80d33e7901f7569df73f9530a0c.png" width="256" height="256">
+<img src="https://typeslint.com/columbina/imgColumbina.png" width="256" height="256">
 <p align="center">
 
 <img src="https://img.shields.io/github/repo-size/Muunatic/Columbina?style=flat-square">
