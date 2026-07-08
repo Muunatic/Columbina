@@ -1,26 +1,24 @@
-import eslint from '@eslint/js';
-import tseslint from 'typescript-eslint';
-import tsPlugin from '@typescript-eslint/eslint-plugin';
-import tsParser from '@typescript-eslint/parser';
+import { defineConfig } from "eslint/config";
+import eslint from "@eslint/js";
+import tseslint, { parser, plugin } from "typescript-eslint";
+import stylistic from "@stylistic/eslint-plugin";
 
-export default tseslint.config(
-    eslint.configs.recommended,
-    tseslint.configs.recommended,
-    tseslint.configs.recommendedTypeChecked,
-
+export default defineConfig(
     {
-        files: ['**/*.ts'],
+        files: ["**/*.ts"],
         languageOptions: {
-            ecmaVersion: 14,
-            parser: tsParser,
+            ecmaVersion: 15,
+            parser: parser,
             parserOptions: {
-                ecmaVersion: 14,
-                sourceType: 'module',
-                project: true
+                ecmaVersion: 15,
+                sourceType: "module",
+                project: "./tsconfig.json",
+                tsconfigRootDir: __dirname
             }
         },
         plugins: {
-            '@typescript-eslint': tsPlugin
+            "@typescript-eslint": plugin,
+            "@stylistic": stylistic
         },
         extends: [
             eslint.configs.recommended,
@@ -28,65 +26,84 @@ export default tseslint.config(
             tseslint.configs.recommendedTypeChecked
         ],
         rules: {
-            '@typescript-eslint/array-type': ['warn', {
-                'readonly': 'generic'
+            "camelcase": ["warn", {
+                "properties": "never",
+                "ignoreImports": true
             }],
-            '@typescript-eslint/explicit-function-return-type': ['warn', {
-                'allowExpressions': true
+            "default-case": 1,
+            "eqeqeq": ["warn", "smart"],
+            "no-unreachable": 2,
+            "no-useless-escape": 0,
+            "sort-imports": ["warn", {
+                "ignoreCase": false,
+                "ignoreDeclarationSort": true
             }],
-            '@typescript-eslint/no-explicit-any': 2,
-            '@typescript-eslint/no-unsafe-argument': 0,
-            '@typescript-eslint/no-unsafe-assignment': 0,
-            '@typescript-eslint/no-unsafe-call': 0,
-            '@typescript-eslint/no-unsafe-member-access': 0,
-            '@typescript-eslint/no-unused-vars': 1,
-            '@typescript-eslint/no-unused-expressions': 0,
-            '@typescript-eslint/no-var-requires': 0,
-            '@typescript-eslint/no-misused-promises': ['error', {
-                'checksVoidReturn': {
-                    'arguments': false
-                }
+            "@stylistic/arrow-parens": ["warn", "always"],
+            "@stylistic/brace-style": ["warn", "1tbs"],
+            "@stylistic/comma-dangle": ["error", "never"],
+            "@stylistic/comma-spacing": ["warn", {
+                "after": true,
+                "before": false
             }],
-            'arrow-parens': ['warn', 'always'],
-            'brace-style': ['warn', '1tbs'],
-            'camelcase': 1,
-            'comma-dangle': ['error', 'never'],
-            'comma-style': ['error', 'last'],
-            'eol-last': ['warn', 'always'],
-            'eqeqeq': ['warn', 'smart'],
-            'indent': ['warn', 4, {
-                'MemberExpression': 0
+            "@stylistic/comma-style": ["warn", "last"],
+            "@stylistic/eol-last": ["warn", "always"],
+            "@stylistic/key-spacing": ["warn", {
+                "mode": "strict"
             }],
-            'key-spacing': ['warn', {
-                'mode': 'strict'
+            "@stylistic/keyword-spacing": ["warn", {
+                "after": true,
+                "before": true
             }],
-            'keyword-spacing': ['warn', {
-                'after': true,
-                'before': true
+            "@stylistic/no-extra-semi": 2,
+            "@stylistic/no-multi-spaces": 1,
+            "@stylistic/no-multiple-empty-lines": ["warn", {
+                "max": 1
             }],
-            'no-multi-spaces': 1,
-            'no-multiple-empty-lines': ['warn', {
-                'max': 1
+            "@stylistic/no-tabs": 1,
+            "@stylistic/no-trailing-spaces": 1,
+            "@stylistic/quotes": ["warn", "single", {
+                "avoidEscape": false
             }],
-            'no-return-await': 1,
-            'no-trailing-spaces': 1,
-            'no-unused-expressions': 0,
-            'no-useless-escape': 0,
-            'quotes': ['warn', 'single'],
-            'semi': 'error',
-            'semi-style': ['error', 'last'],
-            'sort-imports': ['warn', {
-                'ignoreCase': false,
-                'ignoreDeclarationSort': true
-            }]
+            "@stylistic/semi": 2,
+            "@stylistic/semi-style": ["warn", "last"],
+            "@stylistic/member-delimiter-style": ["warn", {
+                "multiline": {
+                    "delimiter": "semi",
+                    "requireLast": true
+                },
+                "singleline": {
+                    "delimiter": "semi",
+                    "requireLast": true
+                },
+                "multilineDetection": "brackets"
+            }],
+            "@typescript-eslint/explicit-function-return-type": ["warn", {
+                "allowExpressions": true
+            }],
+            "@typescript-eslint/no-floating-promises": ["error", {
+                "ignoreVoid": false
+            }],
+            "@typescript-eslint/no-unused-vars": 2,
+            "@typescript-eslint/no-unsafe-assignment": 0,
+            "@typescript-eslint/no-unsafe-return": 0,
+            "@typescript-eslint/no-misused-promises": 0,
+            "@typescript-eslint/no-unsafe-argument": 0,
+            "@typescript-eslint/no-unsafe-call": 0,
+            "@typescript-eslint/no-unsafe-member-access": 0,
+            "@typescript-eslint/no-base-to-string": 0,
+            "@typescript-eslint/no-unnecessary-type-assertion": 0,
+            "@typescript-eslint/no-unused-expressions": 0,
+            "@typescript-eslint/no-unsafe-enum-comparison": 0
         }
     },
     {
         ignores: [
-            'node_modules',
-            'package.json',
-            'package-lock.json',
-            'dist'
+            "node_modules",
+            "dist",
+            "build",
+            "*.js",
+            ".test",
+            "eslint.config.ts"
         ]
     }
 );
