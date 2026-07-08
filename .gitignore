@@ -3,3 +3,12 @@ node_modules
 
 # dist
 dist
+
+# tmp
+tmp
+
+# .vscode
+.vscode
+
+# config
+src/data/config.ts
