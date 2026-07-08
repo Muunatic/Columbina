@@ -10,7 +10,7 @@ const commandFiles = fs.readdirSync(commandsPath).filter((file) => file.endsWith
 (async () => {
 
     for (const file of commandFiles) {
-        const command = import(path.join(commandsPath, file)) as Promise<{data: {toJSON: () => string}}>;
+        const command = import(path.join(commandsPath, file)) as Promise<{ data: { toJSON: () => string; }; }>;
         commands.push((await command).data.toJSON());
     }
 
@@ -28,4 +28,4 @@ void (async () => {
         console.error(error);
     }
 
-})();
+})().catch((err: Error) => console.error(err));

@@ -1,8 +1,4 @@
 import { ActionRowBuilder, ActivityType, BaseGuildTextChannel, ButtonBuilder, ButtonInteraction, ButtonStyle, Client, Collection, CommandInteraction, EmbedBuilder, GatewayIntentBits, Interaction, Message, MessageComponentInteraction, Partials } from 'discord.js';
-import { BaseExtractor, GuildQueue, Player, QueueRepeatMode, SearchResult, Track } from 'discord-player';
-import { YoutubeiExtractor, YoutubeiOptions } from 'discord-player-youtubei';
-import { SpotifyExtractor } from '@discord-player/extractor';
-import ytdl, { Filter } from '@distube/ytdl-core';
 import { ClientOptions, CmdOptions, ConstructorOptions } from './structures/option';
 import { basename } from 'path';
 import { token } from '../src/data/config';
@@ -10,7 +6,6 @@ import { name, version } from '../package.json';
 
 class Core {
     public client: Client;
-    public player: Player;
     public clientOptions: ClientOptions;
 
     constructor({ maintenanceMode = false }: ConstructorOptions = {}) {
@@ -44,8 +39,6 @@ class Core {
             ]
         });
 
-        this.player = new Player(this.client);
-
         this.clientOptions = {
             maintenanceMode,
             name: name,
@@ -53,31 +46,8 @@ class Core {
         };
     }
 
-    private async registerExtractors(extractors: ReadonlyArray<typeof BaseExtractor<object>>): Promise<void> {
-        try {
-            for (const extractor of extractors) {
-                if (/YoutubeiExtractor/.test(extractor.name.toString())) {
-                    await this.player.extractors.register(extractor, {
-                        streamOptions: {
-                            useClient: 'IOS'
-                        }
-                    } as YoutubeiOptions);
-
-                    console.log('Succesfully Modify YouTube Extractor');
-                } else {
-                    await this.player.extractors.register(extractor, {});
-                }
-
-                console.log(`Registered extractor: ${extractor.name}`);
-            }
-        } catch (error: unknown) {
-            throw new Error('Error registering extractors', error);
-        }
-    }
-
     public async start(): Promise<void> {
         try {
-            await this.registerExtractors([SpotifyExtractor, YoutubeiExtractor]);
             await this.client.login(token).catch((error: Error) => console.error('\x1b[31mError\x1b[0m:', error.message));
         } catch (error: unknown) {
             throw new Error('Error running client', error);
@@ -86,7 +56,7 @@ class Core {
 }
 
 const core = new Core();
-const { client, player, clientOptions } = core;
+const { client, clientOptions } = core;
 
 (async () => {
     await core.start();
@@ -103,19 +73,11 @@ export {
     CmdOptions,
     CommandInteraction,
     EmbedBuilder,
-    Filter,
-    GuildQueue,
     Interaction,
     Message,
     MessageComponentInteraction,
-    Player,
-    QueueRepeatMode,
-    SearchResult,
-    Track,
     basename,
     client,
     clientOptions,
-    player,
-    token,
-    ytdl
+    token
 };

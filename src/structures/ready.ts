@@ -2,7 +2,7 @@ import semver from 'semver';
 import { ActivityType, basename, client, clientOptions } from '../client';
 console.info(`Loading ${basename(__filename)}`);
 
-client.once('ready', () => {
+client.once('clientReady', () => {
     console.log(client.user.username + '#' + client.user.discriminator + ': \x1b[32m' + 'Hello, World!' + '\x1b[0m');
 });
 
@@ -22,7 +22,7 @@ const checkSemver = async (): Promise<void> => {
         }
     }).then((res) => {
         return res.json();
-    }).then((data: {tag_name: string, html_url: string}) => {
+    }).then((data: { tag_name: string; html_url: string; }) => {
         if (data) {
             if (semver.lt(clientOptions.version, data.tag_name)) {
                 return console.warn('\n\n \x1b[33m' + 'WARN' + '\x1B[0m' + ': ' + clientOptions.name.charAt(0).toUpperCase() + clientOptions.name.slice(1) + ' is ' + '\x1b[31moutdated\x1b[0m' + `! download new release \x1b[32mv${data.tag_name}\x1b[0m from \x1b[34m${data.html_url}\x1b[0m \n\n`);
@@ -33,4 +33,4 @@ const checkSemver = async (): Promise<void> => {
         return;
     });
 };
-void checkSemver();
+void checkSemver().catch((err: Error) => console.error(err));

@@ -13,4 +13,4 @@ interface BaseCmdOptions {
     aliases?: string[];
 }
 
-export type CmdOptions<T extends boolean = true> = T extends true ? BaseCmdOptions : { data: unknown };
+export type CmdOptions<T extends boolean = true> = T extends true ? BaseCmdOptions : { data: unknown; };
