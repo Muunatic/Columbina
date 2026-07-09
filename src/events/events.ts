@@ -1,4 +1,7 @@
-import { GuildQueue, Message, Track, basename, client, player } from '../client';
+import { basename, client } from '../client';
+import { playerEvents } from './player/playerEvents';
+import { PlayerManager } from '../core/playerManager';
+import { Track } from '../utils/interface';
 console.info(`Loading ${basename(__filename)}`);
 
 client.on('shardDisconnect', () => {
@@ -9,22 +12,22 @@ client.on('shardReconnecting', () => {
     console.log('Reconnecting');
 });
 
-player.events.on('emptyChannel', async (queue: GuildQueue<unknown>) => {
-    await (<Message<true>>queue.metadata).channel.send('**No members in the voice channel**');
+playerEvents.on('emptyChannel', async (player: PlayerManager) => {
+    await player.textChannel.send('**No members in the voice channel**');
 });
 
-player.events.on('playerStart', async (queue: GuildQueue<unknown>, track: Track) => {
-    await (<Message<true>>queue.metadata).channel.send(`Now playing **${track.title}**`);
+playerEvents.on('playerStart', async (player: PlayerManager, track: Track) => {
+    await player.textChannel.send(`Now playing **${track.title}**`);
 });
 
-player.events.on('emptyQueue', async (queue: GuildQueue<unknown>) => {
-    await (<Message<true>>queue.metadata).channel.send('**No music left in the queue**');
+playerEvents.on('emptyQueue', async (player: PlayerManager) => {
+    await player.textChannel.send('**No music left in the queue**');
 });
 
-player.events.on('playerError', (queue: GuildQueue<unknown>, error: Error) => {
+playerEvents.on('playerError', (player: PlayerManager, error: Error) => {
     console.error(`Connection Error: ${error.message}`);
 });
 
-player.events.on('error', (queue: GuildQueue<unknown>, error: Error) => {
+playerEvents.on('error', (player: PlayerManager, error: Error) => {
     console.error(error.message);
 });
