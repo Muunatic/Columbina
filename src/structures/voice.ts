@@ -1,11 +1,14 @@
-import { GuildQueue, basename, player } from '../client';
-import { VoiceConnection, VoiceConnectionState, VoiceConnectionStatus } from '@discordjs/voice';
+import { basename, client } from '../client';
+import { VoiceState } from 'discord.js';
+import { queues } from '../core/playerManager';
 console.info(`Loading ${basename(__filename)}`);
 
-player.events.on('connection', (queue: GuildQueue<unknown>) => {
-    (queue.dispatcher.voiceConnection as unknown as VoiceConnection).on('stateChange', (oldState: VoiceConnectionState, newState: VoiceConnectionState) => {
-        if (oldState.status === VoiceConnectionStatus.Ready && newState.status === VoiceConnectionStatus.Connecting) {
-            queue.dispatcher.voiceConnection.configureNetworking();
-        }
-    });
+client.on('voiceStateUpdate', (oldState: VoiceState, newState: VoiceState) => {
+    const guildId = oldState.guild.id;
+    const queue = queues.get(guildId);
+    if (!queue) return;
+
+    if (oldState.channelId === queue.voiceChannel.id || newState.channelId === queue.voiceChannel.id) {
+        queue.checkEmpty();
+    }
 });
