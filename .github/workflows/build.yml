@@ -8,16 +8,16 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v4
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20.19.0'
+        node-version: '24.18.0'
         cache: 'npm'
     - name: Install npm
-      run: npm install npm@10.8.2 -g
+      run: npm install npm@11.16.0 -g
     - name: Install dependencies
       run: npm ci
     - name: Run typescript compiler
