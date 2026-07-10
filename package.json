@@ -1,46 +1,46 @@
 {
   "name": "plana",
-  "version": "4.0.0",
+  "version": "5.0.0-rc.1",
   "description": "P.L.A.N.A",
   "main": "./dist/index.js",
   "scripts": {
     "build": "tsc --build --clean && tsc --build --force --verbose",
     "build:start": "tsc --build --force --verbose && node ./dist/index.js",
-    "test": "eslint .",
-    "lint": "npx eslint **/*.ts",
-    "lint:fix": "npx eslint **/*.ts --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "deploy": "node ./dist/deploy.js",
     "start": "node ./dist/index.js"
   },
-  "homepage": "https://github.com/Muunatic/Columbina",
+  "homepage": "https://github.com/Muunatic/Plana",
   "author": "Muunatic",
   "license": "AGPL-3.0",
   "dependencies": {
-    "@discord-player/extractor": "7.1.0",
-    "@discordjs/builders": "^1.11.1",
+    "@discordjs/builders": "^1.14.1",
     "@discordjs/collection": "^2.0.0",
-    "@discordjs/voice": "^0.18.0",
-    "@distube/ytdl-core": "~4.16.9",
-    "bgutils-js": "^3.2.0",
-    "discord-player": "7.1.0",
-    "discord-player-youtubei": "1.4.5",
-    "discord.js": "^14.19.2",
+    "@discordjs/opus": "0.10.0",
+    "@discordjs/voice": "^0.19.2",
+    "discord.js": "^14.26.5",
     "ffmpeg": "0.0.4",
-    "mediaplex": "1.0.0"
+    "youtube-dl-exec": "^3.1.9"
   },
   "devDependencies": {
-    "@eslint/js": "^9.25.1",
-    "@types/node": "^20.17.32",
-    "@types/semver": "^7.7.0",
-    "@typescript-eslint/eslint-plugin": "^8.31.1",
-    "@typescript-eslint/parser": "^8.31.1",
-    "eslint": "^9.25.1",
+    "@stylistic/eslint-plugin": "^5.10.0",
+    "@types/ffmpeg-static": "^3.0.3",
+    "@types/node": "^24.13.3",
+    "@types/semver": "^7.7.1",
+    "eslint": "^9.39.4",
     "ffmpeg-static": "^4.4.1",
-    "typescript": "^5.8.3",
-    "typescript-eslint": "^8.31.1"
+    "jiti": "^2.7.0",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.62.1"
+  },
+  "overrides": {
+    "discord.js": {
+      "undici": "^6.26.0"
+    }
   },
   "engines": {
-    "node": ">=20.19.0",
-    "npm": ">=10.8.2"
+    "node": ">=24.18.0",
+    "npm": ">=11.16.0"
   }
 }
