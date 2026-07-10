@@ -1,21 +1,27 @@
-import { CmdOptions, Message, QueueRepeatMode, player } from '../../client';
+import { CmdOptions, Message } from '../../client';
+import { queues } from '../../core/playerManager';
+import { RepeatMode } from '../../utils/interface';
 
 export = {
     name: 'repeat',
     aliases: ['loop'],
-    async execute(message: Message<true>) {
-        const queue = player.nodes.get(message.guild.id);
-        if (queue?.isPlaying() == null || queue.isPlaying() === false) return message.reply('**No music is currently playing**');
-        if (!message.member.voice.channel) return message.reply('**You are not in a voice channel!**');
-        if (message.guild.members.me.voice.channel && message.member.voice.channel.id !== message.guild.members.me.voice.channel.id) return message.reply('**You are not in the same voice channel!**');
-        queue.setRepeatMode(queue.repeatMode === QueueRepeatMode.OFF ? QueueRepeatMode.TRACK : QueueRepeatMode.OFF);
-        const nowMode = function(): 0 | 1 {
-            if (queue.repeatMode === QueueRepeatMode.OFF) {
-                return 0;
-            } else {
-                return 1;
-            }
+    async execute(message: Message<true>, args: ReadonlyArray<string>) {
+        const queue = queues.get(message.guild.id);
+        if (!queue) return message.reply('**No active queue in this server**');
+
+        const mode = args[0]?.toLowerCase();
+        const modeMap: Record<string, RepeatMode> = {
+            off: RepeatMode.Off,
+            track: RepeatMode.Track,
+            song: RepeatMode.Track,
+            queue: RepeatMode.Queue
         };
-        await message.reply(nowMode ? `Loop **${queue.repeatMode === QueueRepeatMode.OFF ? 'disabled' : 'enabled'}**` : `Loop **${queue.repeatMode === QueueRepeatMode.OFF ? 'disabled' : 'enabled'}**`);
+
+        if (!mode || !(mode in modeMap)) {
+            return message.reply('**Usage: `repeat <off|track|queue>`**');
+        }
+
+        queue.setRepeatMode(modeMap[mode]);
+        await message.reply(`**Repeat mode set to: ${mode}**`);
     }
 } as CmdOptions;

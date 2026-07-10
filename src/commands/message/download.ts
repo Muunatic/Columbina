@@ -1,100 +1,102 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, CmdOptions, EmbedBuilder, Filter, Message, MessageComponentInteraction, ytdl } from '../../client';
-import { ytCookieArray } from '../../data/config';
+import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, EmbedBuilder, MessageComponentInteraction } from 'discord.js';
+import { CmdOptions, Message } from '../../client';
 import { defaultError } from '../../structures/error';
+import { downloadAsMp3, downloadAsMp4, getDownloadInfo, isYoutubeUrl } from '../../core/ytdl';
 import fs from 'node:fs';
+import path from 'node:path';
+
+const MAX_SIZE_MB = 8;
+const TMP_DIR = path.join(process.cwd(), 'tmp');
 
 export = {
     name: 'download',
     async execute(message: Message<true>, args: ReadonlyArray<string>) {
-        const agent = ytCookieArray ? ytdl.createAgent(ytCookieArray as ytdl.Cookie[]) : undefined;
         if (!args[0]) return message.reply('**Provide a YouTube URL <https://www.youtube.com/watch?v=>**');
-        if (ytdl.validateURL(args[0]) === true) {
-            let mimeType: string, filterVal: string, qualityVal: string, srcSize: string, srcFormat: ytdl.videoFormat;
-            const srcInfo = ytdl.getInfo(args[0]);
-            const mp3Size = (parseInt(ytdl.chooseFormat((await srcInfo).formats, {filter: 'audioonly', quality: 'highestaudio'}).contentLength) / 1024 / 1024).toFixed(2) + ' MB';
-            const mp4Size = (parseInt(ytdl.chooseFormat((await srcInfo).formats, {filter: 'audioandvideo', quality: 'highest'}).contentLength) / 1024 / 1024).toFixed(2) + ' MB';
-            const extType: string[] = [ 'mp3', 'mp4' ];
+        if (!isYoutubeUrl(args[0])) return message.reply({ content: defaultError });
 
-            const embed = new EmbedBuilder()
+        const info = await getDownloadInfo(args[0]);
+        if (!info) return message.reply({ content: defaultError });
+
+        const formatSize = (mb: number | null): string => {
+            if (mb === null || isNaN(mb)) return 'Unavailable';
+            return `${mb.toFixed(2)} MB`;
+        };
+
+        const embed = new EmbedBuilder()
             .setColor('#89e0dc')
-            .setURL((await srcInfo).videoDetails.video_url)
-            .setTitle((await srcInfo).videoDetails.title)
-            .setDescription('**Maximum Download Size: 8 MB**')
-            .setThumbnail((await srcInfo).videoDetails.thumbnails[0].url)
+            .setURL(info.url)
+            .setTitle(info.title)
+            .setDescription(`**Maximum Download Size: ${MAX_SIZE_MB} MB**`)
+            .setThumbnail(info.thumbnail ?? null)
             .addFields(
-                {name: '🎵 MP3', value: `${mp3Size ? mp3Size === 'NaN MB' ? 'Unavailable' : mp3Size : mp3Size === 'NaN MB' ? 'Unavailable' : mp3Size}`, inline: false},
-                {name: '📹 MP4', value: `${mp4Size ? mp4Size === 'NaN MB' ? 'Unavailable' : mp4Size : mp4Size === 'NaN MB' ? 'Unavailable' : mp4Size}`, inline: false}
+                { name: '🎵 MP3', value: formatSize(info.mp3SizeMB), inline: false },
+                { name: '📹 MP4', value: formatSize(info.mp4SizeMB), inline: false }
             )
-            .setFooter({text: `Requested by ${message.author.username}`, iconURL: message.author.avatarURL({extension: 'png', forceStatic: false, size: 1024})})
+            .setFooter({
+                text: `Requested by ${message.author.username}`,
+                iconURL: message.author.displayAvatarURL({ extension: 'png', forceStatic: false, size: 1024 })
+            })
             .setTimestamp();
 
-            const row = new ActionRowBuilder<ButtonBuilder>()
-            .addComponents(
-                new ButtonBuilder()
-                .setCustomId('mp3')
-                .setLabel('🎵 MP3')
-                .setStyle(ButtonStyle.Primary)
-            )
-            .addComponents(
-                new ButtonBuilder()
-                .setCustomId('mp4')
-                .setLabel('📹 MP4')
-                .setStyle(ButtonStyle.Primary)
-            );
+        const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
+            new ButtonBuilder().setCustomId('mp3').setLabel('🎵 MP3').setStyle(ButtonStyle.Primary),
+            new ButtonBuilder().setCustomId('mp4').setLabel('📹 MP4').setStyle(ButtonStyle.Primary)
+        );
 
-            const btnFilter = (msg: MessageComponentInteraction): boolean => msg.member.user.id === message.author.id;
-            const collector = message.channel.createMessageComponentCollector({ filter: btnFilter, time: 30000 });
+        const reply = await message.reply({ embeds: [embed], components: [row] });
 
-            await message.reply({embeds: [embed], components: [row]}).then((msg) => {
-                collector.on('collect', async (msgButton: ButtonInteraction) => {
-                    row.components[0].setDisabled(true) && row.components[1].setDisabled(true);
-                    await msgButton.update({components: [row]});
-                    collector.stop();
-                    if (msgButton.customId === extType.find((a) => msgButton.customId === a)) {
-                        mimeType = msgButton.customId;
-                        mimeType ? mimeType === 'mp4' ? ( filterVal = 'audioandvideo', qualityVal = 'highest' ) : ( filterVal = 'audioonly', qualityVal = 'highestaudio' ) : mimeType === 'mp4' ? ( filterVal = 'audioandvideo', qualityVal = 'highest' ) : ( filterVal = 'audioonly', qualityVal = 'highestaudio' );
-                        srcFormat = ytdl.chooseFormat((await srcInfo).formats, {filter: filterVal as Filter, quality: qualityVal});
-                        srcSize = (parseInt(srcFormat.contentLength) / 1024 / 1024).toFixed(2);
-                        if (parseInt(srcSize) < 8.00 && parseInt(srcSize) >= 0.00) {
-                            await message.react('✅');
-                            ytdl(args[0], {filter: filterVal as Filter, quality: qualityVal, agent: agent ? agent : undefined})
-                            .pipe(fs.createWriteStream(message.id + `.${mimeType}`))
-                            .on('error', () => {
-                                void (async () => {
-                                    await message.reply(defaultError);
-                                })();
-                            })
-                            .on('finish', () => {
-                                (async () => {
-                                    await message.reply({files: [{
-                                        attachment: message.id + `.${mimeType}`,
-                                        name: (await srcInfo).videoDetails.title + `.${mimeType}`,
-                                        description: 'Requested by ' + message.author.username
-                                    }]}).then(() => {
-                                        fs.unlink(message.id + `.${mimeType}`, (err: Error) => {
-                                            if (err) throw new Error(err.message);
-                                        });
-                                    });
-                                })().catch((err) => console.error(err));
-                            });
-                        } else {
-                            await message.reply(`**The file size of ${mimeType} exceeds 8 MB!**`);
+        const btnFilter = (i: MessageComponentInteraction): boolean => i.user.id === message.author.id;
+        const collector = message.channel.createMessageComponentCollector({ filter: btnFilter, time: 30000 });
+
+        collector.on('collect', async (interaction: ButtonInteraction) => {
+            row.components.forEach((btn) => btn.setDisabled(true));
+            await interaction.update({ components: [row] });
+            collector.stop();
+
+            const mimeType = interaction.customId as 'mp3' | 'mp4';
+
+            await message.react('✅');
+
+            if (!fs.existsSync(TMP_DIR)) fs.mkdirSync(TMP_DIR, { recursive: true });
+
+            const outputPath = path.join(TMP_DIR, `${message.id}.${mimeType}`);
+
+            try {
+                if (mimeType === 'mp3') {
+                    await downloadAsMp3(args[0], outputPath);
+                } else {
+                    await downloadAsMp4(args[0], outputPath);
+                }
+
+                const stats = fs.statSync(outputPath);
+                const sizeMB = stats.size / 1024 / 1024;
+
+                if (sizeMB > MAX_SIZE_MB) {
+                    await message.reply(`**The file size of ${mimeType} exceeds ${MAX_SIZE_MB} MB!**`);
+                    fs.unlink(outputPath, () => null);
+                    return;
+                }
+
+                await message.reply({
+                    files: [
+                        {
+                            attachment: outputPath,
+                            name: `${info.title}.${mimeType}`,
+                            description: `Requested by ${message.author.username}`
                         }
-                    }
-
-                    collector.on('end', (collected) => void collected.size);
+                    ]
                 });
+            } catch (err) {
+                console.error('[download] failed:', err);
+                await message.reply(defaultError);
+            } finally {
+                fs.unlink(outputPath, () => null);
+            }
+        });
 
-                setTimeout(() => {
-                    (async () => {
-                        row.components[0].setDisabled(true) && row.components[1].setDisabled(true);
-                        await msg.edit({components: [row]});
-                        collector.stop();
-                    })().catch((err) => console.log(err));
-                }, 15000);
-            });
-        } else {
-            return message.reply({content: defaultError});
-        }
+        collector.on('end', () => {
+            row.components.forEach((btn) => btn.setDisabled(true));
+            void reply.edit({ components: [row] }).catch((): void => null);
+        });
     }
 } as CmdOptions;

@@ -1,30 +1,46 @@
-import { CmdOptions, EmbedBuilder, Message, player, ytdl } from '../../client';
+import { EmbedBuilder } from 'discord.js';
+import { CmdOptions, Message } from '../../client';
 import { defaultError } from '../../structures/error';
+import { queues } from '../../core/playerManager';
+import { searchLyrics } from '../../core/lyrics';
+
+const MAX_DESCRIPTION_LENGTH = 4096;
 
 export = {
     name: 'lyrics',
     async execute(message: Message<true>) {
-        const queue = player.nodes.get(message.guild.id);
-        if (queue?.isPlaying() == null || queue.isPlaying() === false) return message.reply('**No music is currently playing**');
-        if (!message.member.voice.channel) return message.reply('**You are not in a voice channel!**');
-        if (message.guild.members.me.voice.channel && message.member.voice.channel.id !== message.guild.members.me.voice.channel.id) return message.reply('**You are not in the same voice channel!**');
+        const queue = queues.get(message.guild.id);
+        if (!queue || !queue.isPlaying() || !queue.currentTrack) return message.reply('**No music is currently playing**');
 
-        const thumbnailInfo = typeof queue.currentTrack.thumbnail === 'string' ? queue.currentTrack.thumbnail : await ytdl.getInfo(queue.currentTrack.url).then((data) => {
-            return data.videoDetails.thumbnails[0].url;
-        }).catch(() => {
-            return queue.currentTrack.thumbnail;
-        });
-        const result = await player.lyrics.search({ q: queue.currentTrack.title });
-        if (!result[0].plainLyrics) return message.reply(defaultError);
+        if (!message.member.voice.channel) return message.reply('**You are not in a voice channel!**');
+        if (message.guild.members.me?.voice.channel && message.member.voice.channel.id !== message.guild.members.me.voice.channel.id)
+            return message.reply('**You are not in the same voice channel!**');
+
+        const track = queue.currentTrack;
+        const result = await searchLyrics(track.title);
+
+        if (!result || !result.plainLyrics) return message.reply(defaultError);
+
+        let lyrics = result.plainLyrics;
+        let truncated = false;
+        if (lyrics.length > MAX_DESCRIPTION_LENGTH) {
+            lyrics = lyrics.slice(0, MAX_DESCRIPTION_LENGTH - 20) + '\n\n...(truncated)';
+            truncated = true;
+        }
 
         const embed = new EmbedBuilder()
-        .setColor('#89e0dc')
-        .setTitle(queue.currentTrack.title)
-        .setDescription(result[0].plainLyrics)
-        .setThumbnail(thumbnailInfo)
-        .setFooter({ text: `Listening on ${queue.currentTrack.source}`, iconURL: message.client.user.avatarURL({ extension: 'png', forceStatic: false, size: 1024 }) })
-        .setTimestamp();
+            .setColor('#89e0dc')
+            .setTitle(track.title)
+            .setDescription(lyrics)
+            .setThumbnail(track.thumbnail ?? null)
+            .setFooter({
+                text: truncated
+                    ? `Lyrics truncated • Listening on ${track.source}`
+                    : `Listening on ${track.source}`,
+                iconURL: message.client.user.displayAvatarURL({ extension: 'png', forceStatic: false, size: 1024 })
+            })
+            .setTimestamp();
 
-        await message.reply({embeds: [embed]});
+        await message.reply({ embeds: [embed] });
     }
 } as CmdOptions;

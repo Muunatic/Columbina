@@ -1,56 +1,41 @@
-import { CmdOptions, Message, Track, player, ytdl } from '../../client';
+import { CmdOptions, Message } from '../../client';
+import { PlayerManager, queues } from '../../core/playerManager';
+import { resolveTrack } from '../../core/ytdl';
 import { defaultError } from '../../structures/error';
 
 export = {
     name: 'play',
     async execute(message: Message<true>, args: ReadonlyArray<string>) {
-        if (!message.member.voice.channel) return message.reply('**You are not in a voice channel!**');
+        const query = args.join(' ');
+        if (!query) return message.reply('**Provide a title or URL to start playing a song**');
 
-        if (message.guild.members.me.voice.channel && message.member.voice.channel.id !== message.guild.members.me.voice.channel.id) return message.reply('**You are not in the same voice channel!**');
+        const voiceChannel = message.member.voice.channel;
+        if (!voiceChannel) return message.reply('**You are not in a voice channel!**');
 
-        if (message.member.voice.channel.full === true) return message.reply('**Voice channel is full!**');
+        if (message.guild.members.me?.voice.channel && voiceChannel.id !== message.guild.members.me.voice.channel.id)
+            return message.reply('**You are not in the same voice channel!**');
 
-        if (!args[0]) return message.reply('**Provide a title to start playing a song**');
+        if (voiceChannel.full) return message.reply('**Voice channel is full!**');
 
-        const query = args.join(' ').trim().replace(/^<(.+)>$/, '$1').toString();
-        const ytUrl = ytdl.validateURL(query);
-        const queue = player.nodes.create(message.guild, {
-            selfDeaf: true,
-            leaveOnEnd: true,
-            leaveOnEmpty: true,
-            leaveOnEmptyCooldown: 10000,
-            leaveOnEndCooldown: 10000,
-            metadata: {
-                channel: message.channel
+        let queue = queues.get(message.guild.id);
+        if (!queue) {
+            queue = new PlayerManager(message.guild, voiceChannel, message.channel);
+            try {
+                await queue.connect();
+            } catch {
+                queue.destroy();
+                return message.reply({ content: defaultError });
             }
-        });
-
-        try {
-            if (!queue.connection) await queue.connect(message.member.voice.channel);
-        } catch {
-            queue.delete();
-            return message.reply({ content: defaultError });
+            queues.set(message.guild.id, queue);
         }
 
-        let track: Track;
-        if (new RegExp('\\b' + 'https://open.spotify.com/track/' + '\\b', 'i').test(query)) {
-            const splitQuery = query.includes('?si=') ? query.split('?si=')[0].toString() : query;
-            track = await player.search(splitQuery, {
-                searchEngine: 'spotifySong',
-                ignoreCache: true,
-                requestedBy: message.author
-            }).then((x) => x.tracks[0]);
-        } else {
-            track = await player.search(query, {
-                searchEngine: ytUrl ? 'youtubeVideo' : 'youtube',
-                ignoreCache: true,
-                requestedBy: message.author
-            }).then((x) => x.tracks[0]);
-        }
+        const track = await resolveTrack(query, message.author);
         if (!track) return message.channel.send({ content: defaultError });
 
-        await queue.node.play(track);
+        await queue.addTrack(track);
 
-        return message.channel.send({ content: `Added song **${track.title}** to **${message.member.voice.channel.name}...**` });
+        return message.channel.send({
+            content: `Added song **${track.title}** to **${voiceChannel.name}...**`
+        });
     }
 } as CmdOptions;

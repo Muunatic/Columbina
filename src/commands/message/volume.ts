@@ -1,14 +1,15 @@
-import { CmdOptions, Message, player } from '../../client';
+import { CmdOptions, Message } from '../../client';
+import { queues } from '../../core/playerManager';
 
 export = {
     name: 'volume',
     async execute(message: Message<true>, args: ReadonlyArray<string>) {
-        const queue = player.nodes.get(message.guild.id);
-        if (queue?.isPlaying() == null || queue.isPlaying() === false) return message.reply('**No music is currently playing**');
-        if (!message.member.voice.channel) return message.reply('**You are not in a voice channel!**');
-        if (message.guild.members.me.voice.channel && message.member.voice.channel.id !== message.guild.members.me.voice.channel.id) return message.reply('**You are not in the same voice channel!**');
-        if (!args[0] || Math.round(parseInt(args[0])) < 1 || Math.round(parseInt(args[0])) > 100) return message.reply('**Provide a number between 1 and 100!**');
-        queue.node.setVolume(parseInt(args[0]));
-        await message.reply(`Volume has been set to **${args[0]}%**`);
+        const queue = queues.get(message.guild.id);
+        if (!queue) return message.reply('**No active queue in this server**');
+        if (!args[0]) return message.reply(`**Current volume: ${queue.getVolume()}%**`);
+        const vol = Number(args[0]);
+        if (isNaN(vol)) return message.reply('**Provide a valid number (0-200)**');
+        queue.setVolume(vol);
+        await message.reply(`**Volume set to ${queue.getVolume()}%**`);
     }
-} as CmdOptions;
+} as CmdOptions<true>;
